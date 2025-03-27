@@ -6,9 +6,17 @@ public class Casilla {
 	    private String efecto;
 	    
 	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
+	    public Casilla(String tipo, String efecto) {
+	        this.tipo = tipo;
+	        this.efecto = efecto;
+	    }
+	    
+	    public String getTipo() {
+	        return tipo;
+	    }
+	    
+	    public String getEfecto() {
+	        return efecto;
+	    }
 
 }
