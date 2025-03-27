@@ -18,5 +18,15 @@ public class Casilla {
 	    public String getEfecto() {
 	        return efecto;
 	    }
+	    
+	    public void aplicarEfecto(Usuario usuario) {
+	        if (this.efecto.equals("retroceder")) {
+	            usuario.avanzarCasillas(-2);
+	        } else if (this.efecto.equals("avanzar")) {
+	            usuario.avanzarCasillas(3);
+	        } else {
+	            System.out.println("Efecto desconocido");
+	        }
+	    }
 
 }
