@@ -28,5 +28,17 @@ public class Casilla {
 	            System.out.println("Efecto desconocido");
 	        }
 	    }
+	    
+	    public static void testCasilla() {
+	        Usuario pinguinoPino = new Pinguino(1, "azul", "PinguinoPino");
+	        Casilla casillaAvance = new Casilla("normal", "avanzar");
+	        Casilla casillaRetroceso = new Casilla("normal", "retroceder");
+	        
+	        System.out.println("Posicion inicial: 0");
+	        casillaAvance.aplicarEfecto(pinguinoPino);
+	        System.out.println("Despuws de avanzar: (verificar la salida esperada)");
+	        casillaRetroceso.aplicarEfecto(pinguinoPino);
+	        System.out.println("Despuws de retroceder: (verificar si el error pasa o no)");
+	    }
 
 }
