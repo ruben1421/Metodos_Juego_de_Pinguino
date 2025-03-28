@@ -14,5 +14,17 @@ public class Inventario {
 		this.bolasNieve = 0;
 	}
 	
+	public int getPeces() {
+		return peces;
+	}
+	public int getBolasNieve() {
+		return bolasNieve;
+	}
 	
+	public void setPeces(int peces) {
+		this.peces = peces;
+	}
+	public void setBolasNieve(int bolasNieve) {
+		this.bolasNieve = bolasNieve;
+	}
 }
