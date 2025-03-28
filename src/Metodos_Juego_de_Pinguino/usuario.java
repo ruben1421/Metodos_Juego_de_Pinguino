@@ -20,6 +20,61 @@ public class usuario {
 	        this.peces = 0;
 	        this.bolasnieve = 0;
 	    }
+		
+		
+		 public String getNombre() {
+		        return nombre; 
+		    }
+
+		    public void setNombre(String nombre) {
+		        this.nombre = nombre; 
+		    }
+
+		    public String getColor() {
+		        return color;	
+		    }
+		    
+		    public void setColor(String color) {
+		        this.color = color; 
+		    }
+		    
+		    public int getposicion() {
+		        return posicion;	
+		    }
+		    
+		    public void setposicion(int posicion) {
+		        this.posicion = posicion; 
+		    }
+
+		    public int getDados() {
+		        return dados;	
+		    }
+		    
+		    public void setDados(int dados) {
+		        this.dados = dados; 
+		    }
+
+		    
+		    public int getPeces() {
+		        return peces;	
+		    }
+		    
+		    public void setPeces(int peces) {
+		        this.peces = peces; 
+		    }
+
+		    public int getBolasNieve() {
+		        return bolasnieve;	
+		    }
+		    
+		    public void setBolasNieve(int bolasnieve) {
+		        this.bolasnieve = bolasnieve; 
+		    }
+
+
+
+		 
+
 		 public int tirarDado(boolean especial) {
 		        Random r = new Random();
 		        int resultado;
@@ -34,6 +89,10 @@ public class usuario {
 		        }
 		        return resultado;
 		    }
+		 
+		 
+		 
+		 
 		}
 
 
