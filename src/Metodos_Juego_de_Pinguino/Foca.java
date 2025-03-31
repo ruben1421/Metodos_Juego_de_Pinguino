@@ -1,10 +1,11 @@
 package Metodos_Juego_de_Pinguino;
 
 public class Foca {
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-
+    private int posicion;
+    private int turnosBloqueada;
+    
+    public Foca(int posicion) {
+        this.posicion = posicion;
+        this.turnosBloqueada = 0;
+    }
 }
