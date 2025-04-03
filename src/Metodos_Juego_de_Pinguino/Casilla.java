@@ -19,11 +19,6 @@ public class Casilla {
 	        return efecto;
 	    }
 	    
-<<<<<<< HEAD
-=======
-	    
-	    
->>>>>>> bfb66b28a0984c4a6275e19d7fcfa4c000311449
 	    public void aplicarEfecto(usuario usuario) {
 	    	if (this.efecto.equals("retroceder")) {
 	    		usuario.retrocederCasillas(2);

@@ -116,11 +116,7 @@ public class usuario {
 		        }
 		    }
 		 
-		 
-<<<<<<< HEAD
-		} 
-=======
-		 
+	 
 		 public void retrocederCasillas(int cantidad) {
 			    this.posicion = Math.max(0, this.posicion - cantidad);  
 		    }
@@ -128,7 +124,6 @@ public class usuario {
 			    this.posicion += cantidad;  
 		    }
 		}
->>>>>>> bfb66b28a0984c4a6275e19d7fcfa4c000311449
 
 
 		

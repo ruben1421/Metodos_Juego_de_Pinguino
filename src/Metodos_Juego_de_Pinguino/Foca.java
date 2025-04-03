@@ -24,12 +24,17 @@ public class Foca {
         System.out.println("La foca ha avanzado " + mov + " casillas. Su nueva posicion es: " + posicion);
     }
     
-<<<<<<< HEAD
-    public void golpearCola(usuario rival) {
-=======
+
     public void golpearCola(usuario rival,usuario posicion) {
->>>>>>> bfb66b28a0984c4a6275e19d7fcfa4c000311449
         System.out.println("La Foca intenta pegar a " + rival.getNombre());
+       
+        if (rival.getPeces() > 0) {
+            // Si el jugador tiene peces, puede alimentar a la foca para bloquearla
+            rival.setPeces(rival.getPeces() - 1);
+            turnosBloqueada = 2;
+            System.out.println(rival.getNombre() + " alimentó a la foca con un pez! La foca estará bloqueada 2 turnos.");
+        } else {
+        
         int golpe = random.nextInt(2);
         
         if (golpe == 1) {
@@ -39,4 +44,5 @@ public class Foca {
             System.out.println("El golpe ha fallado y no ha afectado");
         }
     }
+ }
 }
