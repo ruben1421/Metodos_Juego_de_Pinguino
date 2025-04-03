@@ -10,6 +10,7 @@ public class usuario {
 		int dados;
 		int peces; 
 		int bolasnieve;
+		int id;
 		
 		
 		public usuario(String nombre, String color) {
@@ -19,8 +20,13 @@ public class usuario {
 	        this.dados = 0;
 	        this.peces = 0;
 	        this.bolasnieve = 0;
+	        this.id = id;
 	    }
 		
+		
+		public int getId() {
+			return id;
+		}
 		
 		 public String getNombre() {
 		        return nombre; 
@@ -38,7 +44,7 @@ public class usuario {
 		        this.color = color; 
 		    }
 		    
-		    public int getposicion() {
+		    public int getPosicion() {
 		        return posicion;	
 		    }
 		    
@@ -92,7 +98,12 @@ public class usuario {
 		 
 		 
 		 
-		 
+		 public void retrocederCasillas(int cantidad) {
+			    this.posicion = Math.max(0, this.posicion - cantidad);  
+		    }
+			public void avanzarCasillas(int cantidad) {
+			    this.posicion += cantidad;  
+		    }
 		}
 
 
