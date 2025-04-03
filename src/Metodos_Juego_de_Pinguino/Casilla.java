@@ -19,7 +19,7 @@ public class Casilla {
 	        return efecto;
 	    }
 	    
-	    public void aplicarEfecto(Usuario usuario) {
+	    public void aplicarEfecto(usuario usuario) {
 	    	if (this.efecto.equals("retroceder")) {
 	            usuario.retrocederCasillas(2);
 	        } else if (this.efecto.equals("avanzar")) {
