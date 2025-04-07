@@ -29,12 +29,12 @@ public class Casilla {
 	        return tipo;
 	    }
 	    
-<<<<<<< HEAD
+
 	    public String getEfecto() {
 	        return efecto;
 	    }}
 
-=======
+
 
 	    public void aplicarEfecto(usuario usuario) {
 	        switch (efecto) {
@@ -58,6 +58,6 @@ public class Casilla {
 	        }
 	    }
 	}
->>>>>>> 0ab0ccf30e49bb1739415521011e4d1e0a708aab
+
 	    
 

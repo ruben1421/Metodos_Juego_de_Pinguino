@@ -39,11 +39,11 @@ public class tablero {
         System.out.println("¡Tablero generado con éxito!");
     }
     
-<<<<<<< HEAD
+
     public static void main(String[] args) {
     	tablero tablero = new tablero(50);
         tablero.generarTablero();
-=======
+    }
     public Casilla getCasilla(int posicion) {
         if (posicion >= 0 && posicion < casillas.size()) {
             return casillas.get(posicion);
@@ -61,7 +61,7 @@ public void imprimirTablero() {
     System.out.println("Estado del tablero:");
     for (int i = 0; i < casillas.size(); i++) {
         System.out.println("Casilla " + i + ": " + casillas.get(i).getTipo());
->>>>>>> 0ab0ccf30e49bb1739415521011e4d1e0a708aab
+
     }
 }
 }
