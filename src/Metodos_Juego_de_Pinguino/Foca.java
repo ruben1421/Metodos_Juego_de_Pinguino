@@ -24,11 +24,11 @@ public class Foca {
         System.out.println("La foca ha avanzado " + mov + " casillas. Su nueva posicion es: " + posicion);
     }
     
-<<<<<<< HEAD
+
     public void golpearCola(usuario rival) {
-=======
+
     public void golpearCola(usuario rival,usuario posicion) {
->>>>>>> bfb66b28a0984c4a6275e19d7fcfa4c000311449
+
         System.out.println("La Foca intenta pegar a " + rival.getNombre());
         int golpe = random.nextInt(2);
         

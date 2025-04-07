@@ -12,7 +12,7 @@ public class tablero {
     }
     
     public static void main(String[] args) {
-    	tablero tablero = new tablero(20);
+    	tablero tablero = new tablero(50);
         tablero.generarTablero();
     }
 }
