@@ -1,9 +1,9 @@
 package Metodos_Juego_de_Pinguino;
 
 public class CasillaTrineo extends Casilla {
-    private Tablero tablero;
+    private tablero tablero;
     
-    public CasillaTrineo(int posicion, Tablero tablero) {
+    public CasillaTrineo(int posicion, tablero tablero) {
         super(posicion);
         this.tablero = tablero;
     }
