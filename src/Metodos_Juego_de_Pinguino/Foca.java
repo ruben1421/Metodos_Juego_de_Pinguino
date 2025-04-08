@@ -19,16 +19,6 @@ public class Foca {
 	    }
 
 	  
-	    public void aplastarJugador(Pinguino p) {
-	        if (soborno) {
-	            System.out.println("La foca no aplasta a " + p.getNombre() + " porque fue sobornada.");
-	        } else {
-	            System.out.println("La foca aplasta al jugador " + p.getNombre() + "!");
-	          
-	        }
-	    }
-
-	  
 	    public void golpearJugador(Pinguino p) {
 	        if (soborno) {
 	            System.out.println("La foca no golpea a " + p.getNombre() + " porque fue sobornada.");
@@ -65,25 +55,6 @@ public class Foca {
 	        
 	        foca.aplastarJugador(pinguino);
 	        foca.golpearJugador(pinguino);
-	    }
-	}
-
-	class Pinguino {
-	    private String nombre;
-
-	  
-	    public Pinguino(String nombre) {
-	        this.nombre = nombre;
-	    }
-
-	    
-	    public String getNombre() {
-	        return nombre;
-	    }
-
-	   
-	    public void setNombre(String nombre) {
-	        this.nombre = nombre;
 	    }
 	}
 

@@ -13,8 +13,6 @@ public class clase_pinguino extends usuario{
 	
 	}
 
-	
-   
     public ArrayList<String> getInventario() {
         return inventario;
     }
