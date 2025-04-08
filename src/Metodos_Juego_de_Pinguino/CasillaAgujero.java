@@ -1,9 +1,9 @@
 package Metodos_Juego_de_Pinguino;
 
 public class CasillaAgujero extends Casilla {
-    private Tablero tablero;
+    private tablero tablero;
     
-    public CasillaAgujero(int posicion, Tablero tablero) {
+    public CasillaAgujero(int posicion, tablero tablero) {
         super(posicion);
         this.tablero = tablero;
     }

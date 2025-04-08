@@ -1,33 +1,31 @@
 package Metodos_Juego_de_Pinguino;
+import java.util.ArrayList;
 
-public class Casilla {
-	
-	    private String tipo;
-	    private String efecto;
-	    
-	
-	    public Casilla(String tipo, String efecto) {
-	        this.tipo = tipo;
-	        this.efecto = efecto;
-	    }
-	    
-	    public String getTipo() {
-	        return tipo;
-	    }
-	    
-	    public String getEfecto() {
-	        return efecto;
-	    }
-	    
-	    public void aplicarEfecto(Usuario usuario) {
-	    	if (this.efecto.equals("retroceder")) {
-	            usuario.retrocederCasillas(2);
-	        } else if (this.efecto.equals("avanzar")) {
-	            usuario.avanzarCasillas(3);
-	        } else {
-	            System.out.println("Efecto desconocido");
-	        }
-	    }
-	    
-	    
+public abstract class Casilla {
+   int posicion;
+  ArrayList<usuario> jugadoresActuales;
+    
+    public Casilla(int posicion) {
+        this.posicion = posicion;
+        this.jugadoresActuales = new ArrayList<>();
+    }
+    
+    public int getPosicion() {
+        return posicion;
+    }
+    
+    public ArrayList<usuario> getJugadoresActuales() {
+        return jugadoresActuales;
+    }
+    
+    public void añadirJugador(usuario jugador) {
+        jugadoresActuales.add(jugador);
+        realizarAccion(jugador);
+    }
+   
+    public void quitarJugador(usuario jugador) {
+        jugadoresActuales.remove(jugador);
+    }
+    
+    public abstract void realizarAccion(usuario jugador);
 }
