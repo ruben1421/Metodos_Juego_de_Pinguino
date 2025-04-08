@@ -26,13 +26,22 @@ public class Foca {
     
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Ruben_rama
     public void golpearCola(usuario rival) {
 
     public void golpearCola(usuario rival,usuario posicion) {
 
+<<<<<<< HEAD
 =======
     public void golpearCola(usuario rival,usuario posicion) {
 >>>>>>> 0ab0ccf30e49bb1739415521011e4d1e0a708aab
+=======
+
+    public void golpearCola(usuario rival,usuario posicion) {
+
+>>>>>>> Ruben_rama
         System.out.println("La Foca intenta pegar a " + rival.getNombre());
        
         if (rival.getPeces() > 0) {
@@ -51,5 +60,9 @@ public class Foca {
             System.out.println("El golpe ha fallado y no ha afectado");
         }
     }
+<<<<<<< HEAD
  }
 }
+=======
+}}
+>>>>>>> Ruben_rama
