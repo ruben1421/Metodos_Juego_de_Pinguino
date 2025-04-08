@@ -28,7 +28,7 @@ public class CasillaInterrogante extends Casilla {
     }
     
     private void obtenerPez(usuario jugador) {
-        jugador.setPeces(Math.min(jugador.getPeces() + 1, 2));
+        Inventario.setPeces(Math.min(Inventario.getPeces() + 1, 2));
         System.out.println(jugador.getNombre() + " ha ganado un pez!");
     }
     
