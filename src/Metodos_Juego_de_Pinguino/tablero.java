@@ -25,9 +25,15 @@ public class Tablero {
         int tipo = random.nextInt(5); // Genera número entre 0 y 4
         
         switch(tipo) {
+<<<<<<< Updated upstream
             case 0: return new CasillaAgujero(posicion, null);
             case 1: return new CasillaOso(posicion);
             case 2: return new CasillaTrineo(posicion, null);
+=======
+            case 0: return new CasillaAgujero(posicion);
+            case 1: return new CasillaOso(posicion);
+            case 2: return new CasillaTrineo(posicion);
+>>>>>>> Stashed changes
             case 3: return new CasillaInterrogante(posicion);
             default: return new CasillaNormal(posicion);
         }
@@ -46,4 +52,8 @@ public class Tablero {
             System.out.println("Casilla " + i + ": " + casillas.get(i).getClass().getSimpleName());
         }
     }
+<<<<<<< Updated upstream
 }
+=======
+}
+>>>>>>> Stashed changes
