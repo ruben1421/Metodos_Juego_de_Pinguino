@@ -43,7 +43,7 @@ public class usuario {
   
     public void tirarDado(int maximoDado) {
         int resultado = (int) (Math.random() * maximoDado) + 1;
-        System.out.println(nombre + " tiró el dado y sacó: " + resultado);
+        System.out.println(nombre + " tiró el dado y el numero que sacó es: " + resultado);
        this.posicion =   this.posicion+ resultado ;
     }
 
