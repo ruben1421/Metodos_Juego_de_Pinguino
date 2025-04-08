@@ -32,7 +32,7 @@ public class Casilla {
 
 	    public String getEfecto() {
 	        return efecto;
-	    }}
+	    }
 
 
 
