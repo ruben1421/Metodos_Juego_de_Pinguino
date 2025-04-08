@@ -9,7 +9,7 @@ public class CasillaInterrogante extends Casilla {
         this.r = new Random();
     }
 
-    public void realizarAccion(usuario jugador) {
+    public void realizarAccion(usuario jugador, Inventario inventario) {
         int evento = r.nextInt(4);
         switch (evento) {
             case 0:
@@ -27,14 +27,14 @@ public class CasillaInterrogante extends Casilla {
         }
     }
     
-    private void obtenerPez(usuario jugador) {
-        Inventario.setPeces(Math.min(Inventario.getPeces() + 1, 2));
+    private void obtenerPez(usuario jugador, Inventario inventario) {
+        inventario.setCantidadPeces(Math.min(inventario.getCantidadPeces() + 1, 2));
         System.out.println(jugador.getNombre() + " ha ganado un pez!");
     }
     
-    private void obtenerBolasNieve(usuario jugador) {
+    private void obtenerBolasNieve(usuario jugador, Inventario inventario) {
         int cantidad = r.nextInt(3) + 1;
-        jugador.setBolasNieve(Math.min(jugador.getBolasNieve() + cantidad, 6));
+        inventario.setCantidadBolasNieve(Math.min(inventario.getCantidadBolasNieve() + cantidad, 6));
         System.out.println(jugador.getNombre() + " ha conseguido " + cantidad + " bolas de nieve!");
     }
     
