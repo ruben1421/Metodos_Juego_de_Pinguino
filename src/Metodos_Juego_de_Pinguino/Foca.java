@@ -9,7 +9,7 @@ public class Foca {
 
 	  
 	    public Foca() {
-	        this.soborno = false; 
+	        this.soborno = false;
 	    }
 
 
@@ -25,18 +25,25 @@ public class Foca {
 	        this.soborno = soborno;
 	    }
 
-
-	  
-	    public void golpearJugador(Pinguino p) {
+	    // Método para golpear al jugador
+	    public void golpearJugador(String nombreJugador) {
 	        if (soborno) {
-	            System.out.println("La foca no golpea a " + p.getNombre() + " porque fue sobornada.");
+	            System.out.println("La foca no golpea a " + nombreJugador + " porque fue sobornada.");
 	        } else {
-	            System.out.println("La foca golpea al jugador " + p.getNombre() + "!");
-	           
+	            System.out.println("La foca golpea al jugador " + nombreJugador + "!");
 	        }
 	    }
 
-	
+	    // Método para aplastar al jugador
+	    public void aplastarJugador(String nombreJugador) {
+	        if (soborno) {
+	            System.out.println("La foca no aplasta a " + nombreJugador + " porque fue sobornada.");
+	        } else {
+	            System.out.println("La foca aplasta al jugador " + nombreJugador + "!");
+	        }
+	    }
+
+	    // Método para verificar si la foca ha sido sobornada
 	    public void esSobornado() {
 	        if (soborno) {
 	            System.out.println("La foca ha sido sobornada.");
