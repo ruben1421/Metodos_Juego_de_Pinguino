@@ -5,10 +5,8 @@ public class Foca {
     
 	 private boolean soborno;
 
-    public void golpearCola(usuario rival) {
-
 	  
-	    public Foca() {
+	    public void Foca() {
 	        this.soborno = false;
 	    }
 
@@ -18,28 +16,26 @@ public class Foca {
 	    }
 
 
-    public void golpearCola(usuario rival,usuario posicion) {
-
 
 	    public void setSoborno(boolean soborno) {
 	        this.soborno = soborno;
 	    }
 
 	    // Método para golpear al jugador
-	    public void golpearJugador(String nombreJugador) {
+	    public void golpearJugador(clase_pinguino pinguino) {
 	        if (soborno) {
-	            System.out.println("La foca no golpea a " + nombreJugador + " porque fue sobornada.");
+	            System.out.println("La foca no golpea a " + pinguino + " porque fue sobornada.");
 	        } else {
-	            System.out.println("La foca golpea al jugador " + nombreJugador + "!");
+	            System.out.println("La foca golpea al jugador " + pinguino + "!");
 	        }
 	    }
 
 	    // Método para aplastar al jugador
-	    public void aplastarJugador(String nombreJugador) {
+	    public void aplastarJugador(clase_pinguino pinguino) {
 	        if (soborno) {
-	            System.out.println("La foca no aplasta a " + nombreJugador + " porque fue sobornada.");
+	            System.out.println("La foca no aplasta a " + pinguino + " porque fue sobornada.");
 	        } else {
-	            System.out.println("La foca aplasta al jugador " + nombreJugador + "!");
+	            System.out.println("La foca aplasta al jugador " + pinguino + "!");
 	        }
 	    }
 
@@ -53,12 +49,14 @@ public class Foca {
 	    }
 
 	
-	    public static void main(String[] args) {
+	    public static void main(String[] args, usuario rival, Inventario inventario) {
 
-	        Pinguino pinguino = new Pinguino("Pipo");
+	    	clase_pinguino pinguino = new clase_pinguino("Pipo", "Azul", 1);
 
 	  
+	        Random r = new Random();
 	        Foca foca = new Foca();
+	       
 
 	       
 	        foca.esSobornado();
@@ -70,27 +68,31 @@ public class Foca {
 	        
 	        foca.aplastarJugador(pinguino);
 	        foca.golpearJugador(pinguino);
-	    }
-	}
+	    
+
+	    
+
 
         System.out.println("La Foca intenta pegar a " + rival.getNombre());
        
-        if (rival.getPeces() > 0) {
+        if (inventario.getCantidadPeces() > 0) {
             // Si el jugador tiene peces, puede alimentar a la foca para bloquearla
-            rival.setPeces(rival.getPeces() - 1);
+            inventario.setCantidadPeces(inventario.getCantidadPeces() - 1);
             turnosBloqueada = 2;
             System.out.println(rival.getNombre() + " alimentó a la foca con un pez! La foca estará bloqueada 2 turnos.");
         } else {
         
-        int golpe = random.nextInt(2);
+        int golpe = r.nextInt(2);
         
         if (golpe == 1) {
-            rival.setposicion(2); 
+            rival.setPosicion(2); 
             System.out.println(rival.getNombre() + " ha sido golpeado y retrocede 2 casillas.");
         } else {
             System.out.println("El golpe ha fallado y no ha afectado");
         }
     }
- }
+	    }
 }
+
+
 
