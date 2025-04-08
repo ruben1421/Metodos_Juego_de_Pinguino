@@ -2,37 +2,70 @@ package Metodos_Juego_de_Pinguino;
 import java.util.Random;
 
 public class Foca {
-    private int posicion;
-    private int turnosBloqueada;
-    private Random random;
     
-    public Foca(int posicion) {
-        this.posicion = posicion;
-        this.turnosBloqueada = 0;
-        this.random = new Random();
-    }
-    
-    public void tirarDado() {
-        if (turnosBloqueada > 0) {
-            turnosBloqueada--;
-            System.out.println("La foca no puede moverse porque esta bloqueada");
-            return;
-        }
-        
-        int mov = random.nextInt(6) + 1; 
-        posicion += mov;
-        System.out.println("La foca ha avanzado " + mov + " casillas. Su nueva posicion es: " + posicion);
-    }
-    
+	 private boolean soborno;
 
-<<<<<<< HEAD
     public void golpearCola(usuario rival) {
 
+	  
+	    public Foca() {
+	        this.soborno = false; 
+	    }
+
+
+	    public boolean isSobornado() {
+	        return soborno;
+	    }
+
+
     public void golpearCola(usuario rival,usuario posicion) {
 
-=======
-    public void golpearCola(usuario rival,usuario posicion) {
->>>>>>> 0ab0ccf30e49bb1739415521011e4d1e0a708aab
+
+	    public void setSoborno(boolean soborno) {
+	        this.soborno = soborno;
+	    }
+
+
+	  
+	    public void golpearJugador(Pinguino p) {
+	        if (soborno) {
+	            System.out.println("La foca no golpea a " + p.getNombre() + " porque fue sobornada.");
+	        } else {
+	            System.out.println("La foca golpea al jugador " + p.getNombre() + "!");
+	           
+	        }
+	    }
+
+	
+	    public void esSobornado() {
+	        if (soborno) {
+	            System.out.println("La foca ha sido sobornada.");
+	        } else {
+	            System.out.println("La foca no ha sido sobornada.");
+	        }
+	    }
+
+	
+	    public static void main(String[] args) {
+
+	        Pinguino pinguino = new Pinguino("Pipo");
+
+	  
+	        Foca foca = new Foca();
+
+	       
+	        foca.esSobornado();
+	        
+	        
+	        foca.setSoborno(true);
+	        foca.esSobornado();
+	        
+	        
+	        foca.aplastarJugador(pinguino);
+	        foca.golpearJugador(pinguino);
+	    }
+	}
+
         System.out.println("La Foca intenta pegar a " + rival.getNombre());
        
         if (rival.getPeces() > 0) {
@@ -53,3 +86,4 @@ public class Foca {
     }
  }
 }
+

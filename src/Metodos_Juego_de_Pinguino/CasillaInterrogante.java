@@ -8,8 +8,7 @@ public class CasillaInterrogante extends Casilla {
         super(posicion);
         this.r = new Random();
     }
-    
-    @Override
+
     public void realizarAccion(usuario jugador) {
         int evento = r.nextInt(4);
         switch (evento) {
