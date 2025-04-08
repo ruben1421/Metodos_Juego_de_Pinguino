@@ -1,14 +1,14 @@
-package metodos_juego_de_pinguino;
+package Metodos_Juego_de_Pinguino;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Tablero {
+public class tablero {
     private int numeroDeCasillas;
     private ArrayList<Casilla> casillas;
     private Random random;
 
-    public Tablero(int numeroDeCasillas) {
+    public tablero(int numeroDeCasillas) {
         this.numeroDeCasillas = numeroDeCasillas;
         this.casillas = new ArrayList<>(numeroDeCasillas);
         this.random = new Random();
@@ -55,7 +55,7 @@ public class Tablero {
     }
 
     public static void main(String[] args) {
-        Tablero tablero = new Tablero(50);
+        tablero tablero = new tablero(50);
         tablero.generarTablero();
         tablero.imprimirTablero();
     }
