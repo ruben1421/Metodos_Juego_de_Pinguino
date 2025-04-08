@@ -1,55 +1,63 @@
 package Metodos_Juego_de_Pinguino;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class tablero {
-    private ArrayList<casilla> casillas;
-    private ArrayList<jugador> jugadores;
-    private int turnos;
-    private jugador jugadorActual;
+    private int numeroDeCasillas;
+    private ArrayList<Casilla> casillas;
+    private Random random;
 
-    public tablero(int numeroDeCasillas) {
-        this.casillas = new ArrayList<>();
-        this.jugadores = new ArrayList<>();
-        this.turnos = 0;
-        this.jugadorActual = null;
-
-        // Generar casillas aleatorias
-        for (int i = 0; i < numeroDeCasillas; i++) {
-            casillas.add(generarCasillaAleatoria(i));
-        }
-    }
-
-    private casilla generarCasillaAleatoria(int posicion) {
-        double aleatorio = Math.random();
-
-        if (aleatorio < 0.2) {
-            return new casillaAgujero(posicion);
-        } else if (aleatorio < 0.4) {
-            return new casillaInterrogante(posicion);
-        } else if (aleatorio < 0.6) {
-            return new casillaNormal(posicion);
-        } else if (aleatorio < 0.8) {
-            return new casillaOso(posicion);
-        } else {
-            return new casillaTrineo(posicion);
-        }
+    public void Tablero(int numeroDeCasillas) {
+        this.numeroDeCasillas = numeroDeCasillas;
+        this.casillas = new ArrayList<>(numeroDeCasillas);
+        this.random = new Random();
     }
 
     public void generarTablero() {
-        System.out.println("Tablero generado con " + casillas.size() + " casillas.");
+        casillas.clear();
+
+        for (int i = 0; i < numeroDeCasillas; i++) {
+            Casilla casilla;
+
+            if (i == 0) {
+                casilla = new CasillaNormal(i); // La primera casilla es siempre normal
+            } else {
+                int tipoAleatorio = random.nextInt(4); // Cambié el rango a 4 para evitar duplicados
+                switch (tipoAleatorio) {
+                    case 0: casilla = new CasillaAgujero(i, null); break;
+                    case 1: casilla = new CasillaOso(i); break;
+                    case 2: casilla = new CasillaTrineo(i, null); break;
+                    case 3: casilla = new CasillaInterrogante(i); break;
+                    default: casilla = new CasillaNormal(i); break;
+                }
+            }
+
+            casillas.add(casilla);
+        }
+    }
+
+    public Casilla getCasilla(int posicion) {
+        if (posicion >= 0 && posicion < casillas.size()) {
+            return casillas.get(posicion);
+        }
+        return null;
+    }
+
+    public int getNumeroDeCasillas() {
+        return numeroDeCasillas;
+    }
+
+    public void imprimirTablero() {
         for (int i = 0; i < casillas.size(); i++) {
             System.out.println("Casilla " + i + ": " + casillas.get(i).getClass().getSimpleName());
         }
     }
 
-    public void actualizarTablero() {
-        System.out.println("Actualizando estado del tablero...");
-    }
-
-    public void actualizarJugador(jugador j) {
-        this.jugadorActual = j;
-        System.out.println("Jugador actual actualizado: " + j.getNombre());
+    public static void main(String[] args) {
+        Tablero tablero = new Tablero(50);
+        tablero.generarTablero();
+        tablero.imprimirTablero();
     }
 }
 
