@@ -1,5 +1,4 @@
 package Metodos_Juego_de_Pinguino;
-
 import java.util.ArrayList;
 
 public class Inventario {

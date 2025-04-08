@@ -5,9 +5,9 @@ public class CasillaOso extends Casilla {
         super(posicion);
     }
     
-    public void realizarAccion(usuario jugador) {
-        if (jugador.getPeces() > 0) {
-            jugador.setPeces(jugador.getPeces() - 1);
+    public void realizarAccion(usuario jugador, Inventario inventario) {
+        if (Inventario.getPeces() > 0) {
+            Inventario.setPeces(Inventario.getPeces() - 1);
             System.out.println(jugador.getNombre() + " ha usado un pez para calmar al oso!");
         } else {
             jugador.setPosicion(0);
