@@ -59,4 +59,9 @@ public class tablero {
         tablero.generarTablero();
         tablero.imprimirTablero();
     }
+
+	public int encontrarAgujeroAnterior(int posicion) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
