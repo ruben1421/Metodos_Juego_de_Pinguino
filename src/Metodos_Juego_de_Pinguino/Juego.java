@@ -27,4 +27,8 @@ public class Juego {
         System.out.println("Guardando estado...");
     }
 
+    public void salirJuego() {
+    	// Implementación para salir del juego
+    	System.out.println("Saliendo del juego...");
+    }
 }
