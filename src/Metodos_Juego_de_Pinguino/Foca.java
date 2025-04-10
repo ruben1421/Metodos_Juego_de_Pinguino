@@ -78,7 +78,7 @@ public class Foca {
         if (inventario.getCantidadPeces() > 0) {
             // Si el jugador tiene peces, puede alimentar a la foca para bloquearla
             inventario.setCantidadPeces(inventario.getCantidadPeces() - 1);
-            turnosBloqueada = 2;
+            int turnosBloqueada = 2;
             System.out.println(rival.getNombre() + " alimentó a la foca con un pez! La foca estará bloqueada 2 turnos.");
         } else {
         
