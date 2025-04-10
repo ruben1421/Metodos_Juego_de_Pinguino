@@ -42,4 +42,10 @@ public class Foca {
 	        } else {
 	            System.out.println("La foca no ha sido sobornada.");
 	        }
-	    }}
+
+	    
+
+	    
+    }}
+
+
