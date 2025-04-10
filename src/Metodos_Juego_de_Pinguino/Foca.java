@@ -91,6 +91,5 @@ public class Foca {
             System.out.println("El golpe ha fallado y no ha afectado");
         }
     }
-	    }
-	}
+	   }
 }

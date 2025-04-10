@@ -40,13 +40,13 @@ public class CasillaInterrogante extends Casilla {
     
     private void dadoRapido(usuario jugador) {
         int avance = r.nextInt(6) + 5;
-        jugador.avanzarCasillas(avance);
+        jugador.avanzar(avance);
         System.out.println(jugador.getNombre() + " ha obtenido un dado rapido! Avanza " + avance + " casillas");
     }
     
     private void dadoLento(usuario jugador) {
         int retroceso = r.nextInt(3) + 1;
-        jugador.retrocederCasillas(retroceso);
+        jugador.retroceder(retroceso);
         System.out.println(jugador.getNombre() + " ha conseguido un dado lento! Retrocede " + retroceso + " casillas");
     }
 }
