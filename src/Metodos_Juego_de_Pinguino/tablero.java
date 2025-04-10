@@ -37,6 +37,11 @@ public class tablero {
         }
     }
 
+    public static void main(String[] args) {
+    	tablero tablero = new tablero(50);
+        tablero.generarTablero();
+    }
+
     public Casilla getCasilla(int posicion) {
         if (posicion >= 0 && posicion < casillas.size()) {
             return casillas.get(posicion);

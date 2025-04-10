@@ -46,6 +46,12 @@ public class usuario {
         System.out.println(nombre + " tiró el dado y el numero que sacó es: " + resultado);
        this.posicion =   this.posicion+ resultado ;
     }
+    
+    public void avanzar(int maximoDado) {
+        int resultado = (int) (Math.random() * maximoDado) + 1;
+        this.posicion += resultado;  
+        System.out.println(nombre + " avanzó " + resultado + " casillas y ahora está en la posición " + this.posicion);
+    }
 
 }
 		
