@@ -13,7 +13,7 @@ public class CasillaInterrogante extends Casilla {
         int evento = r.nextInt(4);
         switch (evento) {
             case 0:
-                obtenerPez(jugador);
+                (jugador);
                 break;
             case 1:
                 obtenerBolasNieve(jugador);

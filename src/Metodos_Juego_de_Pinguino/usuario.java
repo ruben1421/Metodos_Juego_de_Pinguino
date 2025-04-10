@@ -53,6 +53,9 @@ public class usuario {
         System.out.println(nombre + " avanzó " + resultado + " casillas y ahora está en la posición " + this.posicion);
     }
 
+    public void retroceder(int maximoDado) {
+    	
+    }
 }
 		
 		
