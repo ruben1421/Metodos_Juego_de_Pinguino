@@ -45,8 +45,14 @@ public class CasillaInterrogante extends Casilla {
     }
     
     private void dadoLento(usuario jugador) {
-        int retroceso = r.nextInt(3) + 1;
-        jugador.retroceder(retroceso);
-        System.out.println(jugador.getNombre() + " ha conseguido un dado lento! Retrocede " + retroceso + " casillas");
+        int avanceLento = r.nextInt(3) + 1;
+        jugador.avanzar(avanceLento);
+        System.out.println(jugador.getNombre() + " ha conseguido un dado lento! Avanza " + avanceLento + " casillas");
     }
+
+	@Override
+	public void realizarAccion(usuario jugador) {
+		// TODO Auto-generated method stub
+		
+	}
 }
