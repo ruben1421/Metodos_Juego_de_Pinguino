@@ -37,7 +37,7 @@ public class tablero {
         }
     }
 
-    public static void main(String[] args) {
+    public static void mainTablero(String[] args) {
     	tablero tablero = new tablero(50);
         tablero.generarTablero();
     }
