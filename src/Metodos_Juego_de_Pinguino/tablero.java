@@ -21,9 +21,9 @@ public class tablero {
             Casilla casilla;
 
             if (i == 0) {
-                casilla = new CasillaNormal(i); // La primera casilla es siempre normal
+                casilla = new CasillaNormal(i);
             } else {
-                int tipoAleatorio = random.nextInt(4); // Cambié el rango a 4 para evitar duplicados
+                int tipoAleatorio = random.nextInt(4); 
                 switch (tipoAleatorio) {
                     case 0: casilla = new CasillaAgujero(i, null); break;
                     case 1: casilla = new CasillaOso(i); break;
