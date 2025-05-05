@@ -1,4 +1,4 @@
-package Metodos_Juego_de_Pinguino;
+ package Metodos_Juego_de_Pinguino;
 
 import java.util.ArrayList;
 import java.util.Random;
