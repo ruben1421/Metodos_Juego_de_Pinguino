@@ -13,10 +13,10 @@ public class CasillaInterrogante extends Casilla {
         int evento = r.nextInt(4);
         switch (evento) {
             case 0:
-                (jugador);
+                obtenerPez(jugador, inventario);
                 break;
             case 1:
-                obtenerBolasNieve(jugador);
+                obtenerBolasNieve(jugador, inventario);
                 break;
             case 2:
                 dadoRapido(jugador);
@@ -40,13 +40,19 @@ public class CasillaInterrogante extends Casilla {
     
     private void dadoRapido(usuario jugador) {
         int avance = r.nextInt(6) + 5;
-        jugador.avanzarCasillas(avance);
+        jugador.avanzar(avance);
         System.out.println(jugador.getNombre() + " ha obtenido un dado rapido! Avanza " + avance + " casillas");
     }
     
     private void dadoLento(usuario jugador) {
-        int retroceso = r.nextInt(3) + 1;
-        jugador.retrocederCasillas(retroceso);
-        System.out.println(jugador.getNombre() + " ha conseguido un dado lento! Retrocede " + retroceso + " casillas");
+        int avanceLento = r.nextInt(3) + 1;
+        jugador.avanzar(avanceLento);
+        System.out.println(jugador.getNombre() + " ha conseguido un dado lento! Avanza " + avanceLento + " casillas");
     }
+
+	@Override
+	public void realizarAccion(usuario jugador) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -65,4 +65,9 @@ public class tablero {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	public int encontrarSiguienteTrineo(int posicion) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
