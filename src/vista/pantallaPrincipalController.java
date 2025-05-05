@@ -1,16 +1,16 @@
 package vista;
 
-import inicio.fxml.FXML;
-import inicio.scene.control.Button;
-import inicio.scene.control.MenuItem;
-import inicio.scene.control.PasswordField;
-import inicio.scene.control.TextField;
-import inicio.fxml.FXMLLoader;
-import inicio.scene.Parent;
-import inicio.scene.Scene;
-import inicio.stage.Stage;
-import inicio.event.ActionEvent;
-import inicio.scene.Node;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.event.ActionEvent;
+import javafx.scene.Node;
 
 public class pantallaPrincipalController {
 
