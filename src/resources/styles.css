@@ -1,0 +1,22 @@
+.button {
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 1);
+}
+
+.button:hover {
+    -fx-opacity: 0.9;
+}
+
+#dado {
+    -fx-background-color: #3498DB;
+    -fx-text-fill: white;
+}
+
+#dado:hover {
+    -fx-background-color: #2980B9;
+}
+
+.scroll-pane {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}

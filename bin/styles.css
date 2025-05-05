@@ -1,0 +1,70 @@
+/* style.css */
+.root {
+    -fx-font-family: 'Arial';
+}
+
+.menu-bar {
+    -fx-background-color: #2a2a2a;
+    -fx-text-fill: white;
+}
+
+.header-text {
+    -fx-fill: #333333;
+    -fx-font-size: 1.5em;
+    -fx-font-weight: bold;
+}
+
+.dice-button {
+    -fx-background-color: #4a86e8;
+    -fx-text-fill: white;
+    -fx-font-size: 1.2em;
+    -fx-padding: 10 20;
+    -fx-background-radius: 15;
+}
+
+.dice-button:hover {
+    -fx-background-color: #3d6cb9;
+}
+
+.resource-text {
+    -fx-font-size: 1.3em;
+    -fx-fill: #444444;
+}
+
+.resource-button {
+    -fx-background-color: #6aa84f;
+    -fx-text-fill: white;
+    -fx-font-size: 1.1em;
+    -fx-background-radius: 10;
+}
+
+.resource-button:hover {
+    -fx-background-color: #5d9745;
+}
+
+.event-text {
+    -fx-fill: #666666;
+    -fx-font-size: 1.1em;
+}
+
+.game-board {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 2;
+}
+
+.board-label {
+    -fx-font-size: 1.8em;
+    -fx-fill: #666666;
+    -fx-font-weight: bold;
+}
+
+.player-token {
+    -fx-stroke: white;
+    -fx-stroke-width: 2;
+}
+
+.player1 { -fx-fill: #4285f4; }
+.player2 { -fx-fill: #ea4335; }
+.player3 { -fx-fill: #34a853; }
+.player4 { -fx-fill: #fbbc05; }
