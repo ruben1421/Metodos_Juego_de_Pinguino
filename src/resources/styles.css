@@ -1,0 +1,41 @@
+.button {
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 1);
+}
+
+.button:hover {
+    -fx-opacity: 0.9;
+}
+
+#dado {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-size: 18;
+}
+
+#dado:hover {
+    -fx-background-color: #2980B9;
+}
+
+.scroll-pane {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+
+.list-view {
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #444444;
+}
+
+.list-cell:odd {
+    -fx-background-color: #f8f8f8;
+}
+
+
+

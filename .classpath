@@ -7,47 +7,42 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Alumnat/Desktop/lib/javafx.base.jar">
+	<classpathentry exported="true" kind="lib" path="C:/Users/Alumnat/Desktop/javafx-sdk-17/lib/javafx.base.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Alumnat/Desktop/lib/javafx.controls.jar">
+	<classpathentry exported="true" kind="lib" path="C:/Users/Alumnat/Desktop/javafx-sdk-17/lib/javafx.controls.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Alumnat/Desktop/lib/javafx.fxml.jar">
+	<classpathentry exported="true" kind="lib" path="C:/Users/Alumnat/Desktop/javafx-sdk-17/lib/javafx.fxml.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Alumnat/Desktop/lib/javafx.graphics.jar">
+	<classpathentry exported="true" kind="lib" path="C:/Users/Alumnat/Desktop/javafx-sdk-17/lib/javafx.graphics.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Alumnat/Desktop/lib/javafx.media.jar">
+	<classpathentry exported="true" kind="lib" path="C:/Users/Alumnat/Desktop/javafx-sdk-17/lib/javafx.media.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Alumnat/Desktop/lib/javafx.swing.jar">
+	<classpathentry exported="true" kind="lib" path="C:/Users/Alumnat/Desktop/javafx-sdk-17/lib/javafx.swing.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Alumnat/Desktop/lib/javafx.web.jar">
+	<classpathentry exported="true" kind="lib" path="C:/Users/Alumnat/Desktop/javafx-sdk-17/lib/javafx.web.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Alumnat/Desktop/lib/javafx-swt.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Alumnat/Downloads/ojdbc11.jar">
+	<classpathentry exported="true" kind="lib" path="C:/Users/Alumnat/Desktop/javafx-sdk-17/lib/javafx-swt.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>

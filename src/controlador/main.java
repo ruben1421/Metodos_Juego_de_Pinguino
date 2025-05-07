@@ -1,5 +1,8 @@
 package controlador;
 
+import java.sql.Connection;
+
+import Metodos_Juego_de_Pinguino.bbdd;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,6 +13,9 @@ public class main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		Connection con = bbdd.conectarBaseDatos();
+		
+		
 		//System.out.println(getClass().getResource("/pantallaPrincipal.fxml"));
 	    FXMLLoader loader = new FXMLLoader(getClass().getResource("/inicio.fxml"));
 	    Parent root = loader.load();
