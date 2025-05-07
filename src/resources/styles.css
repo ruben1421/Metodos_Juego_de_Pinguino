@@ -1,6 +1,7 @@
 .button {
+    -fx-font-weight: bold;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 1);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 1);
 }
 
 .button:hover {
@@ -8,8 +9,9 @@
 }
 
 #dado {
-    -fx-background-color: #3498DB;
+    -fx-background-color: #3498db;
     -fx-text-fill: white;
+    -fx-font-size: 18;
 }
 
 #dado:hover {
@@ -20,3 +22,20 @@
     -fx-background: transparent;
     -fx-background-color: transparent;
 }
+
+.list-view {
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #444444;
+}
+
+.list-cell:odd {
+    -fx-background-color: #f8f8f8;
+}
+
+
+

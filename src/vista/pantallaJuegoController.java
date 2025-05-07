@@ -40,14 +40,20 @@ public class pantallaJuegoController {
     @FXML private Circle P4;
     
     //ONLY FOR TESTING!!!
-    private int p1Position = 0; // Tracks current position (from 0 to 49 in a 5x10 grid)
+    private int p1Position = 0;
     private final int COLUMNS = 5;
+    private final int MAX_CELLS = 49; // 0-indexed
 
     @FXML
     private void initialize() {
-        // This method is called automatically after the FXML is loaded
-        // You can set initial values or add listeners here
-        eventos.setText("¡El juego ha comenzado!");
+        eventos.setText("¡Bienvenido! Presiona 'Tirar los dados' para comenzar.");
+        resetPlayerPositions(); // Initialize all players to (0,0)
+    }
+
+    private void resetPlayerPositions() {
+        GridPane.setRowIndex(P1, 0);
+        GridPane.setColumnIndex(P1, 0);
+        // Repeat for P2, P3, P4 if needed
     }
 
     // Button and menu actions
@@ -80,27 +86,15 @@ public class pantallaJuegoController {
     private void handleDado(ActionEvent event) {
         Random rand = new Random();
         int diceResult = rand.nextInt(6) + 1;
-
-        // Update the Text 
-        dadoResultText.setText("Ha salido: " + diceResult);
-
-        // Update the position
+        dadoResultText.setText("Resultado: " + diceResult);
         moveP1(diceResult);
+        eventos.setText(eventos.getText() + "\nJugador 1 avanza " + diceResult + " casillas.");
     }
 
     private void moveP1(int steps) {
-        p1Position += steps;
-
-        //Bound player
-        if (p1Position >= 50) {
-            p1Position = 49; // 5 columns * 10 rows = 50 cells (index 0 to 49)
-        }
-
-        //Check row and column
+        p1Position = Math.min(p1Position + steps, MAX_CELLS); // Cap at 49
         int row = p1Position / COLUMNS;
         int col = p1Position % COLUMNS;
-
-        //Change P1 property to match row and column
         GridPane.setRowIndex(P1, row);
         GridPane.setColumnIndex(P1, col);
     }
