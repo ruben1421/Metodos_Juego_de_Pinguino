@@ -22,12 +22,12 @@
         <menus>
             <Menu mnemonicParsing="false" style="-fx-text-fill: white;" text="File">
                 <items>
-                    <MenuItem fx:id="newGame" mnemonicParsing="false" text="New" />
+                    <MenuItem fx:id="newGame" mnemonicParsing="false" text="New" onAction="#handleNewGame" />
                     <SeparatorMenuItem mnemonicParsing="false" />
-                    <MenuItem fx:id="saveGame" mnemonicParsing="false" text="Save" />
-                    <MenuItem fx:id="loadGame" mnemonicParsing="false" text="Load" />
+                    <MenuItem fx:id="saveGame" mnemonicParsing="false" text="Save" onAction="#handleSaveGame" />
+                    <MenuItem fx:id="loadGame" mnemonicParsing="false" text="Load" onAction="#handleLoadGame" />
                     <SeparatorMenuItem mnemonicParsing="false" />
-                    <MenuItem fx:id="quitGame" mnemonicParsing="false" text="Quit" />
+                    <MenuItem fx:id="quitGame" mnemonicParsing="false" text="Quit" onAction="#handleQuitGame" />
                 </items>
             </Menu>
         </menus>
@@ -61,20 +61,18 @@
                             <Font size="30.0" />
                         </font>
                     </Text>
-                    <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 24; -fx-fill: #555555;" text="Finish" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.rowIndex="9">
+                    <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 24; -fx-fill: #555555;" text="Finish" GridPane.columnIndex="0" GridPane.halignment="LEFT" GridPane.rowIndex="9">
                         <font>
                             <Font size="30.0" />
                         </font>
                     </Text>
-                    <HBox spacing="20" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                        <children>
-                            <Circle fx:id="P1" fill="BLUE" radius="20.0" stroke="BLACK" strokeType="INSIDE" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 1);" />
-                            <Circle fx:id="P2" fill="RED" radius="20.0" stroke="BLACK" strokeType="INSIDE" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 1);" />
-                            <Circle fx:id="P3" fill="GREEN" radius="20.0" stroke="BLACK" strokeType="INSIDE" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 1);" />
-                            <Circle fx:id="P4" fill="YELLOW" radius="20.0" stroke="BLACK" strokeType="INSIDE" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 1);" />
-                        </children>
-                    </HBox>
                 </children>
+                <HBox fx:id="startPosition" spacing="10" alignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="0">
+				    <Circle fx:id="P1" fill="BLUE" radius="20.0" />
+				    <Circle fx:id="P2" fill="RED" radius="20.0" />
+				    <Circle fx:id="P3" fill="GREEN" radius="20.0" />
+				    <Circle fx:id="P4" fill="YELLOW" radius="20.0" />
+				</HBox>
             </GridPane>
         </center>
 
@@ -86,7 +84,7 @@
                             <VBox alignment="CENTER" spacing="10" style="-fx-background-color: #E8F4FF; -fx-padding: 15; -fx-background-radius: 10;">
                                 <children>
                                     <Text fx:id="dadoResultText" style="-fx-font-size: 20; -fx-fill: #2C3E50;" text="Resultado de dados:" />
-                                    <Button fx:id="dado" style="-fx-font-size: 18; -fx-background-color: #3498DB; -fx-text-fill: white; -fx-background-radius: 5; -fx-padding: 10 20;" text="Tirar los dados" />
+                                    <Button fx:id="dado" onAction="#handleDado" style="-fx-font-size: 18; -fx-background-color: #3498DB; -fx-text-fill: white; -fx-background-radius: 5; -fx-padding: 10 20;" text="Tirar los dados" />
                                 </children>
                             </VBox>
 
@@ -105,15 +103,15 @@
                                             <Text fx:id="peces_t" style="-fx-font-size: 16; -fx-fill: #34495E;" text="Pez: 0" GridPane.columnIndex="2" GridPane.rowIndex="0" />
                                             <Text fx:id="nieve_t" style="-fx-font-size: 16; -fx-fill: #34495E;" text="Bolas de nieve: 0" GridPane.columnIndex="3" GridPane.rowIndex="0" />
                                             
-                                            <Button fx:id="rapido" style="-fx-font-size: 14; -fx-background-color: #27AE60; -fx-text-fill: white; -fx-background-radius: 5;" text="Usa" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                                            <Button fx:id="lento" style="-fx-font-size: 14; -fx-background-color: #F39C12; -fx-text-fill: white; -fx-background-radius: 5;" text="Usa" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                            <Button fx:id="peces" style="-fx-font-size: 14; -fx-background-color: #2980B9; -fx-text-fill: white; -fx-background-radius: 5;" text="Usa" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                            <Button fx:id="nieve" style="-fx-font-size: 14; -fx-background-color: #8E44AD; -fx-text-fill: white; -fx-background-radius: 5;" text="Usa" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                            <Button fx:id="rapido" onAction="#handleRapido" style="-fx-font-size: 14; -fx-background-color: #27AE60; -fx-text-fill: white; -fx-background-radius: 5;" text="Usa" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                            <Button fx:id="lento" onAction="#handleLento" style="-fx-font-size: 14; -fx-background-color: #F39C12; -fx-text-fill: white; -fx-background-radius: 5;" text="Usa" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                            <Button fx:id="peces" onAction="#handlePeces" style="-fx-font-size: 14; -fx-background-color: #2980B9; -fx-text-fill: white; -fx-background-radius: 5;" text="Usa" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                            <Button fx:id="nieve" onAction="#handleNieve" style="-fx-font-size: 14; -fx-background-color: #8E44AD; -fx-text-fill: white; -fx-background-radius: 5;" text="Usa" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                                         </children>
-                              <rowConstraints>
-                                 <RowConstraints />
-                                 <RowConstraints />
-                              </rowConstraints>
+                                        <rowConstraints>
+                                            <RowConstraints />
+                                            <RowConstraints />
+                                        </rowConstraints>
                                     </GridPane>
                                 </children>
                             </VBox>
