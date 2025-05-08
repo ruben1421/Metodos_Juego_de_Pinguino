@@ -126,6 +126,13 @@
                                     </ScrollPane>
                                 </children>
                             </VBox>
+                            
+                            <VBox alignment="CENTER" spacing="10" style="-fx-background-color: #F9E79F; -fx-padding: 15; -fx-background-radius: 10;">
+							    <children>
+							        <Text style="-fx-font-size: 16; -fx-fill: #34495E;" text="Opciones del juego" />
+							        <Button fx:id="opcionesJuego" onAction="#handleOpcionesJuego" style="-fx-font-size: 14; -fx-background-color: #F1C40F; -fx-text-fill: white; -fx-background-radius: 5;" text="Abrir menú" />
+							    </children>
+							</VBox>
                         </children>
                     </HBox>
                 </children>

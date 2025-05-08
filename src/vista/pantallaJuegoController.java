@@ -38,6 +38,7 @@ public class pantallaJuegoController {
     @FXML private Button lento;
     @FXML private Button peces;
     @FXML private Button nieve;
+    @FXML private Button opcionesJuego;
 
     @FXML private Text dadoResultText;
     @FXML private Text rapido_t;
@@ -173,6 +174,27 @@ public class pantallaJuegoController {
             
             handleTileEffect(oldPosition, p1Position);
         }
+    }
+    
+    @FXML
+    private void handleOpcionesJuego(ActionEvent event) {
+    	// Use the button itself as the source
+        ContextMenu contextMenu = new ContextMenu();
+
+        MenuItem guardarTabla = new MenuItem("Guardar Tabla");
+        MenuItem resetearTabla = new MenuItem("Resetear Tabla");
+        MenuItem salirDelJuego = new MenuItem("Salir del Juego");
+
+        // Set actions for each item
+        guardarTabla.setOnAction(e -> handleSaveGame());
+        resetearTabla.setOnAction(e -> handleResetTable());
+        salirDelJuego.setOnAction(e -> handleQuitGame());
+
+        // Add items to context menu
+        contextMenu.getItems().addAll(guardarTabla, resetearTabla, salirDelJuego);
+
+        // Show context menu near the button
+        contextMenu.show(opcionesJuego, javafx.geometry.Side.BOTTOM, 0, 0);
     }
     
     private void handleTileEffect(int oldPos, int newPos) {
@@ -402,7 +424,7 @@ public class pantallaJuegoController {
     
     @FXML
     private void handleSaveGame() { 
-    	try {
+        try {
             // Create a map representing the board state
             Map<Integer, String> boardState = new HashMap<>();
             for (int i = 0; i < juegoTablero.getNumeroDeCasillas(); i++) {
@@ -410,17 +432,41 @@ public class pantallaJuegoController {
                 boardState.put(i, casilla.getClass().getSimpleName());
             }
 
-            // Get DB connection (you should set this after login)
+            // Use a default starting position (e.g., 0)
+            int currentPlayerPosition = 0; // Replace with real logic later
+
+            // Get DB connection
             bbdd bb = new bbdd();
-            dbConnection = bb.conectarBaseDatos();
+            Connection dbConnection = bb.conectarBaseDatos();
 
             // Save the game
             PartidaDAO partidaDAO = new PartidaDAO(dbConnection);
-            partidaDAO.guardarNuevaPartida(currentGameId, "2025-04-05", "15:30:00", boardState, inventario, currentUserId);
+            
+            // Save the game without 'hora' and include 'posicion'
+            partidaDAO.guardarNuevaPartida(
+                currentGameId,
+                "2025-04-05",             // Fecha en formato YYYY-MM-DD
+                boardState,               // Estado del tablero
+                inventario,               // Inventario del jugador
+                currentUserId,            // ID del jugador
+                currentPlayerPosition     // Posición actual del jugador en el tablero
+            );
+
             addEvent("Partida guardada en la base de datos.");
         } catch (Exception e) {
             showError("No se pudo guardar la partida: " + e.getMessage());
         } 
+    }
+    
+    private void handleResetTable() {
+        addEvent("🔄 Reiniciando el tablero...");
+        juegoTablero = new tablero(50);
+        juegoTablero.generarTablero();
+        highlightSpecialSquares();
+        resetPlayerPositions();
+        updatePowerUpCounts();
+        updateButtonStates();
+        addEvent("🔁 Tablero reiniciado correctamente.");
     }
     
     @FXML
@@ -455,5 +501,8 @@ public class pantallaJuegoController {
     }
     
     @FXML
-    private void handleQuitGame() { System.exit(0); }
+    private void handleQuitGame() {
+    	addEvent("🚪 Saliendo del juego...");
+    	System.exit(0); 
+    }
 }
