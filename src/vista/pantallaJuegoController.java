@@ -274,7 +274,21 @@ public class pantallaJuegoController {
         Random rand = new Random();
         int diceResult = rand.nextInt(6) + 1;
         movePlayer(P1, diceResult);
-        // ... rest of dice handling
+        
+        addEvent("Tiraste un " + diceResult + " y avanzaste a la casilla " + p1Position);
+        
+        if (p1Position >= juegoTablero.getNumeroDeCasillas() - 1) {
+            addEvent("🎉 ¡Felicidades! Has llegado al final del tablero.");
+            disableGameButtons(); // Optional: Disable buttons after winning
+        }
+    }
+    
+    private void disableGameButtons() {
+        dado.setDisable(true);
+        rapido.setDisable(true);
+        lento.setDisable(true);
+        peces.setDisable(true);
+        nieve.setDisable(true);
     }
 
     @FXML

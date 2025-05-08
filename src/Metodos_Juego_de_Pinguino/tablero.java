@@ -18,7 +18,7 @@ public class tablero {
     private static final int MIN_SPECIAL_TILES = 15;
     private static final int MAX_SPECIAL_TILES = 25;
     private static final double PROBABILITY_OSO = 0.25;
-    private static final double PROBABILITY_AGUJERO = 0.01;
+    private static final double PROBABILITY_AGUJERO = 0.1;
     private static final double PROBABILITY_TRINEO = 0.25;
     private static final double PROBABILITY_INTERROGANTE = 0.25;
 
