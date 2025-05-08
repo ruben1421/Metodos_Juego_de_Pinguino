@@ -1,8 +1,21 @@
 package vista;
 
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
+import Metodos_Juego_de_Pinguino.Casilla;
+import Metodos_Juego_de_Pinguino.CasillaAgujero;
+import Metodos_Juego_de_Pinguino.CasillaInterrogante;
+import Metodos_Juego_de_Pinguino.CasillaNormal;
+import Metodos_Juego_de_Pinguino.CasillaOso;
+import Metodos_Juego_de_Pinguino.CasillaTrineo;
 import Metodos_Juego_de_Pinguino.Inventario;
+import Metodos_Juego_de_Pinguino.PartidaDAO;
+import Metodos_Juego_de_Pinguino.bbdd;
+import Metodos_Juego_de_Pinguino.tablero;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -10,6 +23,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.paint.Color;
 
 public class pantallaJuegoController {
 
@@ -43,6 +58,50 @@ public class pantallaJuegoController {
     private final int COLUMNS = 5;
     private final int ROWS = 10;
     private int actionCount = 0;
+    private tablero juegoTablero = new tablero(50);
+    private int currentGameId = 1; // You can generate dynamically later
+    int currentUserId = 1; // This should come from login
+    Connection dbConnection; // Set this after login
+    
+    private void highlightSpecialSquares() {
+        // Clear previous highlights
+        tablero.getChildren().removeIf(node -> node instanceof Rectangle);
+        
+        // Highlight Oso positions (brown)
+        highlightPositions(juegoTablero.getOsoPositions(), Color.BROWN);
+        
+        // Highlight Agujero positions (black)
+        highlightPositions(juegoTablero.getAgujeroPositions(), Color.BLACK);
+        
+        // Highlight Trineo positions (light blue)
+        highlightPositions(juegoTablero.getTrineoPositions(), Color.LIGHTBLUE);
+        
+        // Highlight Interrogante positions (yellow)
+        highlightPositions(juegoTablero.getInterrogantePositions(), Color.GOLD);
+    }
+    
+    private void highlightPositions(ArrayList<Integer> positions, Color color) {
+        for (int pos : positions) {
+            int row = pos / COLUMNS;
+            int col = pos % COLUMNS;
+            
+            // Snake pattern adjustment
+            if (row % 2 == 1) {
+                col = (COLUMNS - 1) - col;
+            }
+            
+            Rectangle highlight = new Rectangle(55,55, color);
+            highlight.setOpacity(0.3);  // Semi-transparent
+            highlight.setStroke(Color.BLACK);
+            highlight.setStrokeWidth(1);
+            
+            GridPane.setRowIndex(highlight, row);
+            GridPane.setColumnIndex(highlight, col);
+            
+            tablero.getChildren().add(highlight);
+            highlight.toBack();  // Ensure it's behind other elements
+        }
+    }
 
     @FXML
     public void initialize() {
@@ -53,6 +112,7 @@ public class pantallaJuegoController {
         inventario.setCantidadDados(1); 
         inventario.setCantidadBolasNieve(1);
         
+        highlightSpecialSquares();
         updatePowerUpCounts();
         updateButtonStates();
     }
@@ -102,16 +162,101 @@ public class pantallaJuegoController {
 
     private void movePlayer(Circle player, int steps) {
     	if (player == P1) {
-            // Remove from group if still grouped
             if (startPosition.getChildren().contains(P1)) {
                 startPosition.getChildren().remove(P1);
                 tablero.getChildren().add(P1);
             }
             
-            // Calculate new position
+            int oldPosition = p1Position;
             p1Position = Math.min(p1Position + steps, (COLUMNS * ROWS) - 1);
             updatePlayerPosition(P1, p1Position);
+            
+            handleTileEffect(oldPosition, p1Position);
         }
+    }
+    
+    private void handleTileEffect(int oldPos, int newPos) {
+        Casilla tile = juegoTablero.getCasilla(newPos);
+        
+        if (tile instanceof CasillaOso) {
+            handleOsoTile();
+        } 
+        else if (tile instanceof CasillaAgujero) {
+            handleAgujeroTile(newPos);
+        }
+        else if (tile instanceof CasillaTrineo) {
+            handleTrineoTile(newPos);
+        }
+        else if (tile instanceof CasillaInterrogante) {
+            handleInterroganteTile();
+        }
+    }
+
+    private void handleOsoTile() {
+        addEvent("¡Encontraste un oso!");
+        P1.setFill(Color.DARKRED);
+        
+        if (inventario.getCantidadPeces() > 0) {
+            inventario.getPeces().quitar(1);
+            addEvent("Usaste un pez para calmar al oso!");
+        } else {
+            p1Position = 0;
+            updatePlayerPosition(P1, 0);
+            addEvent("¡Sin peces! Vuelves al inicio");
+        }
+        updatePowerUpCounts();
+    }
+
+    private void handleAgujeroTile(int pos) {
+        addEvent("¡Caíste en un agujero!");
+        P1.setFill(Color.BLACK);
+        
+        int newPos = juegoTablero.encontrarAgujeroAnterior(pos);
+        p1Position = newPos;
+        updatePlayerPosition(P1, newPos);
+        addEvent("Retrocedes a la casilla " + newPos);
+    }
+
+    private void handleTrineoTile(int pos) {
+        addEvent("¡Encontraste un trineo!");
+        P1.setFill(Color.LIGHTBLUE);
+        
+        int newPos = juegoTablero.encontrarSiguienteTrineo(pos);
+        p1Position = newPos;
+        updatePlayerPosition(P1, newPos);
+        addEvent("¡Zummm! Avanzas a la casilla " + newPos);
+    }
+
+    private void handleInterroganteTile() {
+        addEvent("¡Casilla sorpresa!");
+        P1.setFill(Color.GOLD);
+        
+        Random r = new Random();
+        int evento = r.nextInt(4);
+        switch (evento) {
+            case 0:
+                inventario.getPeces().agregar(1);
+                addEvent("¡Ganaste un pez!");
+                break;
+            case 1:
+                int bolasNieve = r.nextInt(3) + 1;
+                inventario.getBolasNieve().agregar(bolasNieve);
+                addEvent("¡Ganaste " + bolasNieve + " bolas de nieve!");
+                break;
+            case 2:
+                int avanceRapido = r.nextInt(6) + 5;
+                p1Position = Math.min(p1Position + avanceRapido, (COLUMNS * ROWS) - 1);
+                updatePlayerPosition(P1, p1Position);
+                addEvent("¡Dado rápido! Avanzas " + avanceRapido + " casillas");
+                break;
+            case 3:
+                int avanceLento = r.nextInt(3) + 1;
+                p1Position = Math.min(p1Position + avanceLento, (COLUMNS * ROWS) - 1);
+                updatePlayerPosition(P1, p1Position);
+                addEvent("¡Dado lento! Avanzas " + avanceLento + " casillas");
+                break;
+        }
+        updatePowerUpCounts();
     }
 
     private void addEvent(String message) {
@@ -204,13 +349,97 @@ public class pantallaJuegoController {
         updateButtonStates();
         addEvent("¡Obtuviste " + cantidad + " bola(s) de nieve!");
     }
+    
+    private void reiniciarTableroConEstado(Map<Integer, String> estadoCasillas) {
+        juegoTablero = new tablero(50); // Reset board
+        juegoTablero.generarTablero(); // Generate default first
+
+        // Replace with loaded values
+        for (Map.Entry<Integer, String> entry : estadoCasillas.entrySet()) {
+            int pos = entry.getKey();
+            String tipo = entry.getValue();
+
+            switch (tipo) {
+                case "CasillaNormal":
+                    juegoTablero.casillas.set(pos, new CasillaNormal(pos));
+                    break;
+                case "CasillaOso":
+                    juegoTablero.casillas.set(pos, new CasillaOso(pos));
+                    juegoTablero.osoPositions.add(pos);
+                    break;
+                case "CasillaAgujero":
+                    juegoTablero.casillas.set(pos, new CasillaAgujero(pos, juegoTablero));
+                    juegoTablero.agujeroPositions.add(pos);
+                    break;
+                case "CasillaTrineo":
+                    juegoTablero.casillas.set(pos, new CasillaTrineo(pos, juegoTablero));
+                    juegoTablero.trineoPositions.add(pos);
+                    break;
+                case "CasillaInterrogante":
+                    juegoTablero.casillas.set(pos, new CasillaInterrogante(pos));
+                    juegoTablero.interrogantePositions.add(pos);
+                    break;
+            }
+        }
+    }
 
     @FXML
     private void handleNewGame() { resetPlayerPositions(); }
+    
     @FXML
-    private void handleSaveGame() { addEvent("Juego guardado"); }
+    private void handleSaveGame() { 
+    	try {
+            // Create a map representing the board state
+            Map<Integer, String> boardState = new HashMap<>();
+            for (int i = 0; i < juegoTablero.getNumeroDeCasillas(); i++) {
+                Casilla casilla = juegoTablero.getCasilla(i);
+                boardState.put(i, casilla.getClass().getSimpleName());
+            }
+
+            // Get DB connection (you should set this after login)
+            bbdd bb = new bbdd();
+            dbConnection = bb.conectarBaseDatos();
+
+            // Save the game
+            PartidaDAO partidaDAO = new PartidaDAO(dbConnection);
+            partidaDAO.guardarNuevaPartida(currentGameId, "2025-04-05", "15:30:00", boardState, inventario, currentUserId);
+            addEvent("Partida guardada en la base de datos.");
+        } catch (Exception e) {
+            showError("No se pudo guardar la partida: " + e.getMessage());
+        } 
+    }
+    
     @FXML
-    private void handleLoadGame() { addEvent("Juego cargado"); }
+    private void handleLoadGame() { 
+    	try {
+            // Get DB connection
+            bbdd bb = new bbdd();
+            dbConnection = bb.conectarBaseDatos();
+
+            // Load game
+            PartidaDAO partidaDAO = new PartidaDAO(dbConnection);
+            Map<String, Object> loadedData = partidaDAO.cargarPartida(currentGameId, currentUserId);
+
+            if (loadedData.containsKey("inventario")) {
+                Inventario loadedInventory = (Inventario) loadedData.get("inventario");
+                this.inventario = loadedInventory;
+                updatePowerUpCounts();
+                updateButtonStates();
+                addEvent("Inventario cargado desde la base de datos.");
+            }
+
+            if (loadedData.containsKey("estado_casillas")) {
+                @SuppressWarnings("unchecked")
+                Map<Integer, String> loadedBoard = (Map<Integer, String>) loadedData.get("estado_casillas");
+                reiniciarTableroConEstado(loadedBoard);
+                highlightSpecialSquares();
+                addEvent("Tablero cargado desde la base de datos.");
+            }
+        } catch (Exception e) {
+            showError("No se pudo cargar la partida: " + e.getMessage());
+        }
+    }
+    
     @FXML
     private void handleQuitGame() { System.exit(0); }
 }
