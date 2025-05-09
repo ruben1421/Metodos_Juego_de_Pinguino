@@ -12,47 +12,56 @@ public class PartidaDAO {
     }
 
     // Save new game
-    public void guardarNuevaPartida(int numPartida, String fecha, Map<Integer, String> estadoCasillas, Inventario inventario, int idJugador, int posicionJugador) {
-        try {
-            // Insert into Partida
-            String sqlPartida = "INSERT INTO Partida (num_partida, fecha) VALUES (?, ?)";
-            PreparedStatement stmt = con.prepareStatement(sqlPartida);
-            stmt.setInt(1, numPartida);
-            stmt.setDate(2, Date.valueOf(fecha)); // Assuming date format is "YYYY-MM-DD"
-            stmt.executeUpdate();
+    public int guardarNuevaPartida(String fecha, Map<Integer, String> estadoCasillas, Inventario inventario, int idJugador, int posicionJugador) {
+        int numPartida = -1;
 
-            // Insert into Jugador_Partida
+        try {
+            // Step 1: Get next unique game ID from Oracle sequence
+            numPartida = obtenerSiguienteIdPartida();
+
+            // Step 2: Insert into Partida table
+            String sqlPartida = "INSERT INTO Partida (num_partida, fecha) VALUES (?, ?)";
+            PreparedStatement stmtPartida = con.prepareStatement(sqlPartida);
+            stmtPartida.setInt(1, numPartida);
+            stmtPartida.setDate(2, Date.valueOf(fecha)); // Assumes format like "2025-04-05"
+            stmtPartida.executeUpdate();
+
+            // Step 3: Insert into Jugador_Partida table
             String sqlJugadorPartida = "INSERT INTO Jugador_Partida (id_jugador_partida, id_partida, id_jugador, inventario, posicion) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement stmtJugadorPartida = con.prepareStatement(sqlJugadorPartida);
-            stmtJugadorPartida.setInt(1, generarIDUnico());
+            stmtJugadorPartida.setInt(1, obtenerSiguienteIdJugadorPartida()); // From jugador_partida_seq
             stmtJugadorPartida.setInt(2, numPartida);
             stmtJugadorPartida.setInt(3, idJugador);
             stmtJugadorPartida.setString(4, convertirInventarioAJSON(inventario));
             stmtJugadorPartida.setInt(5, posicionJugador);
             stmtJugadorPartida.executeUpdate();
 
-            // Insert into Casilla table
+            // Step 4: Insert into Casilla table
             String sqlCasilla = "INSERT INTO Casilla (id_casilla, num_partida, nombre, estado, tipo, posicion, descripcion) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmtCasilla = con.prepareStatement(sqlCasilla);
 
-            int casillaId = 1; // Example ID generation
             for (Map.Entry<Integer, String> entry : estadoCasillas.entrySet()) {
                 Integer posicion = entry.getKey();
                 String estado = entry.getValue();
-                stmtCasilla.setInt(1, casillaId++);
+
+                int casillaId = obtenerSiguienteIdCasilla(); // ✅ Use sequence
+                stmtCasilla.setInt(1, casillaId);           // Assign unique ID
                 stmtCasilla.setInt(2, numPartida);
                 stmtCasilla.setString(3, "Casilla_" + posicion);
                 stmtCasilla.setString(4, estado);
-                stmtCasilla.setString(5, "Normal"); // Placeholder for type
+                stmtCasilla.setString(5, "Normal");
                 stmtCasilla.setInt(6, posicion);
                 stmtCasilla.setString(7, "Descripción de casilla " + posicion);
                 stmtCasilla.addBatch();
             }
             stmtCasilla.executeBatch();
 
-            System.out.println("Partida guardada exitosamente.");
+            System.out.println("Partida guardada exitosamente con ID: " + numPartida);
+            return numPartida;
+
         } catch (SQLException e) {
             System.out.println("Error al guardar la partida: " + e.getMessage());
+            return -1;
         }
     }
 
@@ -135,8 +144,33 @@ public class PartidaDAO {
         return inventario;
     }
 
-    // Generate unique ID for jugador_partida
-    private int generarIDUnico() {
-        return (int) (Math.random() * 900000 + 100000); // 6-digit random number
+    public int obtenerSiguienteIdPartida() throws SQLException {
+        String sql = "SELECT partida_seq.NEXTVAL FROM dual";
+        Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+        throw new SQLException("No se pudo obtener un nuevo ID de partida.");
+    }
+    
+    public int obtenerSiguienteIdJugadorPartida() throws SQLException {
+    	String sql = "SELECT jugador_partida_seq.NEXTVAL FROM dual";
+        Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+        throw new SQLException("No se pudo obtener un nuevo ID de Jugador_Partida.");
+    }
+    
+    public int obtenerSiguienteIdCasilla() throws SQLException {
+        String sql = "SELECT casilla_seq.NEXTVAL FROM dual";
+        Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+        throw new SQLException("No se pudo obtener un nuevo ID de Casilla.");
     }
 }

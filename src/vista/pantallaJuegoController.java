@@ -1,9 +1,12 @@
 package vista;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 
 import Metodos_Juego_de_Pinguino.Casilla;
@@ -60,7 +63,6 @@ public class pantallaJuegoController {
     private final int ROWS = 10;
     private int actionCount = 0;
     private tablero juegoTablero = new tablero(50);
-    private int currentGameId = 1; // You can generate dynamically later
     int currentUserId = 1; // This should come from login
     Connection dbConnection; // Set this after login
     
@@ -425,34 +427,36 @@ public class pantallaJuegoController {
     @FXML
     private void handleSaveGame() { 
         try {
-            // Create a map representing the board state
+            // Create board state map
             Map<Integer, String> boardState = new HashMap<>();
             for (int i = 0; i < juegoTablero.getNumeroDeCasillas(); i++) {
                 Casilla casilla = juegoTablero.getCasilla(i);
                 boardState.put(i, casilla.getClass().getSimpleName());
             }
 
-            // Use a default starting position (e.g., 0)
-            int currentPlayerPosition = 0; // Replace with real logic later
+            int currentPlayerPosition = 0;
 
-            // Get DB connection
             bbdd bb = new bbdd();
             Connection dbConnection = bb.conectarBaseDatos();
-
-            // Save the game
             PartidaDAO partidaDAO = new PartidaDAO(dbConnection);
-            
-            // Save the game without 'hora' and include 'posicion'
-            partidaDAO.guardarNuevaPartida(
-                currentGameId,
-                "2025-04-05",             // Fecha en formato YYYY-MM-DD
-                boardState,               // Estado del tablero
-                inventario,               // Inventario del jugador
-                currentUserId,            // ID del jugador
-                currentPlayerPosition     // Posición actual del jugador en el tablero
-            );
 
-            addEvent("Partida guardada en la base de datos.");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+            // Save without passing numPartida manually
+            int currentGameId = partidaDAO.guardarNuevaPartida(
+            	    LocalDate.now().format(formatter), // Fecha
+            	    boardState,                        // Estado del tablero
+            	    inventario,                        // Inventario del jugador
+            	    currentUserId,                     // ID del jugador
+            	    currentPlayerPosition              // Posición actual del jugador
+            	);
+
+            if (currentGameId != -1) {
+                addEvent("Partida guardada con éxito (ID: " + currentGameId + ").");
+            } else {
+                showError("Hubo un problema al guardar la partida.");
+            }
+
         } catch (Exception e) {
             showError("No se pudo guardar la partida: " + e.getMessage());
         } 
@@ -471,32 +475,37 @@ public class pantallaJuegoController {
     
     @FXML
     private void handleLoadGame() { 
-    	try {
-            // Get DB connection
-            bbdd bb = new bbdd();
-            dbConnection = bb.conectarBaseDatos();
+        TextInputDialog dialog = new TextInputDialog("1");
+        dialog.setTitle("Cargar Partida");
+        dialog.setHeaderText("Introduce el ID de la partida que deseas cargar:");
+        dialog.setContentText("ID de partida:");
 
-            // Load game
-            PartidaDAO partidaDAO = new PartidaDAO(dbConnection);
-            Map<String, Object> loadedData = partidaDAO.cargarPartida(currentGameId, currentUserId);
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            try {
+                int gameIdToLoad = Integer.parseInt(result.get());
 
-            if (loadedData.containsKey("inventario")) {
-                Inventario loadedInventory = (Inventario) loadedData.get("inventario");
-                this.inventario = loadedInventory;
-                updatePowerUpCounts();
-                updateButtonStates();
-                addEvent("Inventario cargado desde la base de datos.");
+                bbdd bb = new bbdd();
+                Connection dbConnection = bb.conectarBaseDatos();
+
+                PartidaDAO partidaDAO = new PartidaDAO(dbConnection);
+                Map<String, Object> loadedData = partidaDAO.cargarPartida(gameIdToLoad, currentUserId);
+
+                if (loadedData.isEmpty()) {
+                    showError("No se encontró ninguna partida con ese ID.");
+                } else {
+                    // Successfully loaded
+                    addEvent("Partida cargada exitosamente (ID: " + gameIdToLoad + ").");
+
+                    // Optionally store it temporarily
+                    // currentGameId = gameIdToLoad;
+                }
+
+            } catch (Exception e) {
+                showError("No se pudo cargar la partida: " + e.getMessage());
             }
-
-            if (loadedData.containsKey("estado_casillas")) {
-                @SuppressWarnings("unchecked")
-                Map<Integer, String> loadedBoard = (Map<Integer, String>) loadedData.get("estado_casillas");
-                reiniciarTableroConEstado(loadedBoard);
-                highlightSpecialSquares();
-                addEvent("Tablero cargado desde la base de datos.");
-            }
-        } catch (Exception e) {
-            showError("No se pudo cargar la partida: " + e.getMessage());
+        } else {
+            addEvent("Carga de partida cancelada.");
         }
     }
     
