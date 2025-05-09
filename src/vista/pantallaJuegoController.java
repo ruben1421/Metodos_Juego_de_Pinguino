@@ -184,16 +184,18 @@ public class pantallaJuegoController {
         ContextMenu contextMenu = new ContextMenu();
 
         MenuItem guardarTabla = new MenuItem("Guardar Tabla");
+        MenuItem cargarTabla = new MenuItem("Cargar Tabla");
         MenuItem resetearTabla = new MenuItem("Resetear Tabla");
         MenuItem salirDelJuego = new MenuItem("Salir del Juego");
 
         // Set actions for each item
         guardarTabla.setOnAction(e -> handleSaveGame());
+        cargarTabla.setOnAction(e -> handleLoadGame());
         resetearTabla.setOnAction(e -> handleResetTable());
         salirDelJuego.setOnAction(e -> handleQuitGame());
 
         // Add items to context menu
-        contextMenu.getItems().addAll(guardarTabla, resetearTabla, salirDelJuego);
+        contextMenu.getItems().addAll(guardarTabla, cargarTabla, resetearTabla, salirDelJuego);
 
         // Show context menu near the button
         contextMenu.show(opcionesJuego, javafx.geometry.Side.BOTTOM, 0, 0);
