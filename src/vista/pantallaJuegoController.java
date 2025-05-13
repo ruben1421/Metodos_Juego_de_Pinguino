@@ -28,6 +28,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
+import javafx.scene.layout.StackPane;
+import javafx.geometry.Pos;
 
 public class pantallaJuegoController {
 
@@ -116,8 +118,40 @@ public class pantallaJuegoController {
         inventario.setCantidadBolasNieve(1);
         
         highlightSpecialSquares();
+        generarNumeroDeCasillasDelTablero();
         updatePowerUpCounts();
         updateButtonStates();
+    }
+    
+    private void generarNumeroDeCasillasDelTablero() {
+        // Elimina los números antiguos del tablero, dejando las fichas de los jugadores
+        tablero.getChildren().removeIf(nodo -> nodo instanceof Text && !nodo.equals(P1) && !nodo.equals(P2) && !nodo.equals(P3) && !nodo.equals(P4));
+
+        // Generar número para cada casilla
+        for (int fila = 0; fila < ROWS; fila++) {
+            for (int columna = 0; columna < COLUMNS; columna++) {
+                int posicion = fila * COLUMNS + columna;
+
+                // Ajuste para el patrón serpiente
+                int columnaMostrada = (fila % 2 == 1) ? (COLUMNS - 1 - columna) : columna;
+
+                // Crear texto con el número de la casilla
+                Text numeroCasilla = new Text(String.valueOf(posicion + 1));
+                numeroCasilla.setStyle("-fx-font-size: 24; -fx-fill: #000000; -fx-font-style: bold");
+
+                //Crear un contenedor para mover el texto a la derecha-abajo
+                StackPane contenedorCasilla = new StackPane();
+                StackPane.setAlignment(numeroCasilla, Pos.BOTTOM_RIGHT);
+                contenedorCasilla.getChildren().add(numeroCasilla);
+                
+                // Colocar en la posición correspondiente del GridPane
+                GridPane.setRowIndex(contenedorCasilla, fila);
+                GridPane.setColumnIndex(contenedorCasilla, columnaMostrada);
+
+                // Añadir al tablero
+                tablero.getChildren().add(contenedorCasilla);
+            }
+        }
     }
 
     private void updatePowerUpCounts() {
