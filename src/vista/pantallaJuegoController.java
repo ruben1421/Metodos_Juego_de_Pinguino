@@ -133,7 +133,7 @@ public class pantallaJuegoController {
                 int posicion = fila * COLUMNS + columna;
 
                 // Ajuste para el patrón serpiente
-                int columnaMostrada = (fila % 2 == 1) ? (COLUMNS - 1 - columna) : columna;
+                int columnaMostrada = (fila % 2 == 1) ? (COLUMNS - 1 - columna) : columna; //Si la fila es impar, columnaMostrada = (COLUMNS - 1 - columna), si no, pues columnaMostrada = columna
 
                 // Crear texto con el número de la casilla
                 Text numeroCasilla = new Text(String.valueOf(posicion + 1));
@@ -150,6 +150,20 @@ public class pantallaJuegoController {
 
                 // Añadir al tablero
                 tablero.getChildren().add(contenedorCasilla);
+                
+                //En la posición final, añadimos la palabra fin a la izquierda-abajo
+                if(posicion == 49) {
+                	Text finCasilla = new Text("Fin!");
+                	finCasilla.setStyle("-fx-font-size: 56; -fx-fill: #000000; -fx-font-style: bold");
+                	
+                	StackPane contenedorFin = new StackPane();
+                	StackPane.setAlignment(finCasilla, Pos.BOTTOM_LEFT);
+                	contenedorFin.getChildren().add(finCasilla);
+                	
+                    GridPane.setRowIndex(contenedorFin, fila);
+                    GridPane.setColumnIndex(contenedorFin, columnaMostrada);
+                    tablero.getChildren().add(contenedorFin);
+                }
             }
         }
     }

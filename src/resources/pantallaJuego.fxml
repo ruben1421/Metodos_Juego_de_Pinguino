@@ -56,18 +56,6 @@
 	                    <RowConstraints minHeight="55.0" prefHeight="55.0" vgrow="SOMETIMES" />
 	                    <RowConstraints minHeight="55.0" prefHeight="55.0" vgrow="SOMETIMES" />
 	                </rowConstraints>
-	                <children>
-	                    <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 24; -fx-fill: #555555;" text="Start">
-	                        <font>
-	                            <Font size="30.0" />
-	                        </font>
-	                    </Text>
-	                    <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 24; -fx-fill: #555555;" text="Finish" GridPane.columnIndex="0" GridPane.halignment="LEFT" GridPane.rowIndex="9">
-	                        <font>
-	                            <Font size="30.0" />
-	                        </font>
-	                    </Text>
-	                </children>
 	                <HBox fx:id="startPosition" spacing="10" alignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="0">
 					    <Circle fx:id="P1" fill="BLUE" radius="20.0" />
 					    <Circle fx:id="P2" fill="RED" radius="20.0" />

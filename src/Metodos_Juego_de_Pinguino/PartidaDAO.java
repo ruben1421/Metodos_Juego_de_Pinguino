@@ -4,29 +4,41 @@ import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PartidaDAO {
+public class PartidaDAO { //Clase para manejar las operaciones de base de datos relacionadas con las partidas
     private Connection con;
 
-    public PartidaDAO(Connection con) {
+    public PartidaDAO(Connection con) { //Constructor que recibe la conexión a la base de datos
         this.con = con;
     }
 
-    // Save new game
+    /**
+     * Guarda una nueva partida en la base de datos con todos sus componentes:
+     * - Datos básicos de la partida
+     * - Información del jugador (inventario y posición)
+     * - Estado del tablero (casillas)
+     * 
+     * @param fecha: Fecha de la partida en formato YYYY-MM-DD
+     * @param estadoCasillas: Mapa con las posiciones y estados de las casillas
+     * @param inventario: Objeto con los items del jugador
+     * @param idJugador: ID del jugador en la base de datos
+     * @param posicionJugador: Posición actual del jugador en el tablero
+     * @return ID de la partida guardada o -1 si hubo error
+     */
     public int guardarNuevaPartida(String fecha, Map<Integer, String> estadoCasillas, Inventario inventario, int idJugador, int posicionJugador) {
         int numPartida = -1;
 
         try {
-            // Step 1: Get next unique game ID from Oracle sequence
+        	//Obtiene el ID para la nueva partida
             numPartida = obtenerSiguienteIdPartida();
 
-            // Step 2: Insert into Partida table
+            //Inserta los datos de la partida
             String sqlPartida = "INSERT INTO Partida (num_partida, fecha) VALUES (?, ?)";
             PreparedStatement stmtPartida = con.prepareStatement(sqlPartida);
             stmtPartida.setInt(1, numPartida);
             stmtPartida.setDate(2, Date.valueOf(fecha)); // Assumes format like "2025-04-05"
             stmtPartida.executeUpdate();
 
-            // Step 3: Insert into Jugador_Partida table
+            //Guarda la relación jugador-partida
             String sqlJugadorPartida = "INSERT INTO Jugador_Partida (id_jugador_partida, id_partida, id_jugador, inventario, posicion) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement stmtJugadorPartida = con.prepareStatement(sqlJugadorPartida);
             stmtJugadorPartida.setInt(1, obtenerSiguienteIdJugadorPartida()); // From jugador_partida_seq
@@ -36,7 +48,7 @@ public class PartidaDAO {
             stmtJugadorPartida.setInt(5, posicionJugador);
             stmtJugadorPartida.executeUpdate();
 
-            // Step 4: Insert into Casilla table
+            //Guarda el estado de las casillas del tablero
             String sqlCasilla = "INSERT INTO Casilla (id_casilla, num_partida, nombre, estado, tipo, posicion, descripcion) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmtCasilla = con.prepareStatement(sqlCasilla);
 
@@ -65,12 +77,21 @@ public class PartidaDAO {
         }
     }
 
-    // Load existing game
+    /**
+     * Carga una partida existente desde la base de datos
+     * @param idPartida: ID de la partida a cargar
+     * @param idJugador: ID del jugador que carga la partida
+     * @return Mapa con todos los datos necesarios para reconstruir la partida:
+     *         - fecha: Fecha de la partida
+     *         - inventario: Objeto Inventario del jugador
+     *         - posicion: Posición actual del jugador
+     *         - estado_casillas: Mapa con el estado de cada casilla
+     */
     public Map<String, Object> cargarPartida(int idPartida, int idJugador) {
         Map<String, Object> datosCargados = new HashMap<>();
 
         try {
-            // Load game state from Partida table
+        	//Carga los datos básicos de la partida
             String sqlPartida = "SELECT * FROM Partida WHERE num_partida = ?";
             PreparedStatement stmt = con.prepareStatement(sqlPartida);
             stmt.setInt(1, idPartida);
@@ -80,7 +101,7 @@ public class PartidaDAO {
                 datosCargados.put("fecha", rsPartida.getString("fecha"));
             }
 
-            // Load player inventory and position from Jugador_Partida
+            //Carga el inventario y posición del jugador
             String sqlJugadorPartida = "SELECT inventario, posicion FROM Jugador_Partida WHERE id_partida = ? AND id_jugador = ?";
             PreparedStatement stmtJugadorPartida = con.prepareStatement(sqlJugadorPartida);
             stmtJugadorPartida.setInt(1, idPartida);
@@ -92,7 +113,7 @@ public class PartidaDAO {
                 datosCargados.put("posicion", rsInventario.getInt("posicion"));
             }
 
-            // Load board state from Casilla
+            //Carga el estado del tablero de Casilla
             String sqlCasillas = "SELECT posicion, estado FROM Casilla WHERE num_partida = ?";
             PreparedStatement stmtCasillas = con.prepareStatement(sqlCasillas);
             stmtCasillas.setInt(1, idPartida);
@@ -112,18 +133,16 @@ public class PartidaDAO {
         return datosCargados;
     }
 
-    // Helper method: Convert Inventario to JSON string
-    private String convertirInventarioAJSON(Inventario inventario) {
+    private String convertirInventarioAJSON(Inventario inventario) { // Convierte el inventario a formato JSON para guardarlo
         return String.format("{\"peces\":%d,\"dados\":%d,\"bolas_nieve\":%d}",
                 inventario.getCantidadPeces(),
                 inventario.getCantidadDados(),
                 inventario.getCantidadBolasNieve());
     }
 
-    // Helper method: Convert JSON string to Inventario
-    private Inventario convertirJSONAInventario(String json) {
+    private Inventario convertirJSONAInventario(String json) { //Convierte el JSON guardado a un objeto Inventario
         Inventario inventario = new Inventario();
-        json = json.replaceAll("[{}]", "");
+        json = json.replaceAll("[{}]", ""); // Procesamiento simple del JSON (sin usar librerías externas)
         String[] entries = json.split(",");
         for (String entry : entries) {
             String[] keyValue = entry.split(":");
@@ -144,7 +163,7 @@ public class PartidaDAO {
         return inventario;
     }
 
-    public int obtenerSiguienteIdPartida() throws SQLException {
+    public int obtenerSiguienteIdPartida() throws SQLException { //Obtiene el siguiente ID disponible para partidas
         String sql = "SELECT partida_seq.NEXTVAL FROM dual";
         Statement stmt = con.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
@@ -154,7 +173,7 @@ public class PartidaDAO {
         throw new SQLException("No se pudo obtener un nuevo ID de partida.");
     }
     
-    public int obtenerSiguienteIdJugadorPartida() throws SQLException {
+    public int obtenerSiguienteIdJugadorPartida() throws SQLException { //Obtiene el siguiente ID disponible para jugador_partida
     	String sql = "SELECT jugador_partida_seq.NEXTVAL FROM dual";
         Statement stmt = con.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
@@ -164,7 +183,7 @@ public class PartidaDAO {
         throw new SQLException("No se pudo obtener un nuevo ID de Jugador_Partida.");
     }
     
-    public int obtenerSiguienteIdCasilla() throws SQLException {
+    public int obtenerSiguienteIdCasilla() throws SQLException { //Obtiene el siguiente ID disponible para casilla
         String sql = "SELECT casilla_seq.NEXTVAL FROM dual";
         Statement stmt = con.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
