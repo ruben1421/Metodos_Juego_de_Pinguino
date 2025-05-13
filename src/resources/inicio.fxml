@@ -1,43 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
 
-<VBox alignment="TOP_CENTER" prefHeight="600" prefWidth="500" spacing="20" style="-fx-background-color: linear-gradient(to bottom, #e0f7fa, #b2ebf2); -fx-padding: 20;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vista.pantallaPrincipalController">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="758.0" prefWidth="871.0" spacing="20" style="-fx-background-color: linear-gradient(to bottom, #e0f7fa, #b2ebf2); -fx-padding: 20;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vista.pantallaPrincipalController">
 
     <children>
-
-        <!-- Menú superior -->
-        <MenuBar>
-            <menus>
-                <Menu text="Archivo">
-                    <items>
-                        <MenuItem fx:id="newGame" text="Nuevo Juego" />
-                        <SeparatorMenuItem />
-                        <MenuItem fx:id="saveGame" text="Guardar" />
-                        <MenuItem fx:id="loadGame" text="Cargar" />
-                        <SeparatorMenuItem />
-                        <MenuItem fx:id="quitGame" text="Salir" />
-                    </items>
-                </Menu>
-            </menus>
-        </MenuBar>
+      <ImageView fitHeight="435.0" fitWidth="321.0">
+         <image>
+            <Image url="@20250509_1631_Interfaz%20de%20Inicio%20Pingüino_remix_01jttq939efe7vpb6007ran8ac%20(1).png" />
+         </image>
+      </ImageView>
 
         <!-- Contenido principal -->
         <StackPane>
-            <VBox alignment="CENTER" maxWidth="400" spacing="25.0" style="-fx-background-color: white;                          -fx-padding: 40;                          -fx-background-radius: 15;                          -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0.3, 0, 4);">
-
-                <!-- Título -->
-                <Text style="-fx-font-size: 32px;                              -fx-font-weight: bold;                              -fx-fill: #0277bd;                              -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0.2, 2, 2);" text="EL JUEGO DEL PINGÜINO" />
+            <VBox alignment="CENTER" maxWidth="539.0" prefHeight="249.0" prefWidth="384.0" spacing="25.0" style="-fx-background-color: white;                          -fx-padding: 40;                          -fx-background-radius: 15;                          -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0.3, 0, 4);">
 
                 <!-- Campo de usuario -->
                 <TextField fx:id="userField" promptText="Usuario..." style="-fx-pref-width: 250;                                   -fx-font-size: 14px;                                   -fx-padding: 10;                                   -fx-background-radius: 8;" />
