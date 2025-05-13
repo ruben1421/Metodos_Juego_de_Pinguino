@@ -32,12 +32,15 @@ import javafx.scene.layout.StackPane;
 import javafx.geometry.Pos;
 
 public class pantallaJuegoController {
-
+	
+	//@FXML vincula elementos definidos en un archivo FXML (como botones o textos) con variables o métodos en esta clase controladora.
+	//Elementos del menú
     @FXML private MenuItem newGame;
     @FXML private MenuItem saveGame;
     @FXML private MenuItem loadGame;
     @FXML private MenuItem quitGame;
 
+    //Botones del juego
     @FXML private Button dado;
     @FXML private Button rapido;
     @FXML private Button lento;
@@ -45,6 +48,7 @@ public class pantallaJuegoController {
     @FXML private Button nieve;
     @FXML private Button opcionesJuego;
 
+    //Textos del juego
     @FXML private Text dadoResultText;
     @FXML private Text rapido_t;
     @FXML private Text lento_t;
@@ -52,6 +56,7 @@ public class pantallaJuegoController {
     @FXML private Text nieve_t;
     @FXML private Text eventos;
 
+    //Elementos del tablero
     @FXML private HBox startPosition;
     @FXML private GridPane tablero;
     @FXML private Circle P1;
@@ -59,55 +64,62 @@ public class pantallaJuegoController {
     @FXML private Circle P3;
     @FXML private Circle P4;
     
-    private Inventario inventario = new Inventario();
-    private int p1Position = 0;
-    private final int COLUMNS = 5;
-    private final int ROWS = 10;
-    private int actionCount = 0;
+    private Inventario inventario = new Inventario(); //Inventario del jugador
+    private int p1Position = 0; 					  //Posición actual del jugador 1 en el tablero (inicia en 0)
+    private final int COLUMNS = 5;					  //private final (variable): Nunca cambiará, es constante y solo visible en esta clase
+    private final int ROWS = 10;					  //Configuración del tablero: 5 columnas y 10 filas (total 50 casillas)
+    private int actionCount = 0;					  //Contador de acciones realizadas (para límite de mensajes en pantalla)
     private tablero juegoTablero = new tablero(50);
-    int currentUserId = 1; // This should come from login
-    Connection dbConnection; // Set this after login
+    int currentUserId = 1;							  //ID del usuario actual
+    Connection dbConnection;						  //Conexión a la base de datos
     
-    private void highlightSpecialSquares() {
-        // Clear previous highlights
+    // Método para resaltar las casillas especiales
+    private void highlightSpecialSquares() { 
+    	// Limpiar resaltados anteriores
         tablero.getChildren().removeIf(node -> node instanceof Rectangle);
         
-        // Highlight Oso positions (brown)
+        // Resaltar posiciones de Oso (marrón)
         highlightPositions(juegoTablero.getOsoPositions(), Color.BROWN);
         
-        // Highlight Agujero positions (black)
+        // Resaltar posiciones de Agujero (negro)
         highlightPositions(juegoTablero.getAgujeroPositions(), Color.BLACK);
         
-        // Highlight Trineo positions (light blue)
+        // Resaltar posiciones de Trineo (azul claro)
         highlightPositions(juegoTablero.getTrineoPositions(), Color.LIGHTBLUE);
         
-        // Highlight Interrogante positions (yellow)
+        // Resaltar posiciones de Interrogante (amarillo)
         highlightPositions(juegoTablero.getInterrogantePositions(), Color.GOLD);
     }
     
+    // Método para resaltar casillas especiales del tablero con rectángulos de colores
     private void highlightPositions(ArrayList<Integer> positions, Color color) {
         for (int pos : positions) {
-            int row = pos / COLUMNS;
-            int col = pos % COLUMNS;
+        	// Calcula fila y columna basado en la posición linealv
+            int row = pos / COLUMNS; // Fila = posición / número de columnas
+            int col = pos % COLUMNS; // Columna = resto de la división
             
-            // Snake pattern adjustment
+            // Ajuste para el movimiento en zigzag (filas impares van de derecha a izquierda)
             if (row % 2 == 1) {
-                col = (COLUMNS - 1) - col;
+                col = (COLUMNS - 1) - col; // Invierte el orden de las columnas
             }
             
+            // Crea un rectángulo semitransparente del color especificado
             Rectangle highlight = new Rectangle(55,55, color);
             highlight.setOpacity(0.3);  // Semi-transparent
             highlight.setStroke(Color.BLACK);
             highlight.setStrokeWidth(1);
             
+            // Posiciona el rectángulo en el GridPane
             GridPane.setRowIndex(highlight, row);
             GridPane.setColumnIndex(highlight, col);
             
+            // Añade al tablero y lo envía al fondo para no tapar otros elementos
             tablero.getChildren().add(highlight);
-            highlight.toBack();  // Ensure it's behind other elements
+            highlight.toBack();
         }
     }
 
+    //Este método es para inicializar el juego
     @FXML
     public void initialize() {
         eventos.setText("¡Bienvenido! Presiona 'Tirar los dados' para comenzar.");
@@ -168,6 +180,7 @@ public class pantallaJuegoController {
         }
     }
 
+ 	// Actualiza los textos que muestran la cantidad de power-ups disponibles
     private void updatePowerUpCounts() {
         rapido_t.setText("Dado rápido: " + inventario.getCantidadDados());
         lento_t.setText("Dado lento: " + inventario.getCantidadDados());
@@ -175,6 +188,7 @@ public class pantallaJuegoController {
         nieve_t.setText("Bolas de nieve: " + inventario.getCantidadBolasNieve());
     }
 
+    // Activa/desactiva los botones según la disponibilidad de power-ups
     private void updateButtonStates() {
         rapido.setDisable(inventario.getCantidadDados() <= 0);
         lento.setDisable(inventario.getCantidadDados() <= 0);
@@ -182,14 +196,16 @@ public class pantallaJuegoController {
         nieve.setDisable(inventario.getCantidadBolasNieve() <= 0);
     }
 
+    // Muestra un mensaje de error en el área de eventos del juego
     private void showError(String message) {
         eventos.setText(eventos.getText() + "\n[ERROR] " + message);
     }
     
+    // Reinicia las posiciones de todos los jugadores al punto de inicio
     private void resetPlayerPositions() {
     	tablero.getChildren().removeAll(P1, P2, P3, P4);
         
-        // Add back to starting HBox
+    	// Vuelve a colocar los jugadores en la posición inicial
         startPosition.getChildren().setAll(P1, P2, P3, P4);
         GridPane.setRowIndex(startPosition, 0);
         GridPane.setColumnIndex(startPosition, 0);
@@ -197,61 +213,70 @@ public class pantallaJuegoController {
         p1Position = 0;
     }
 
+    // Actualiza la posición visual de un jugador en el tablero
     private void updatePlayerPosition(Circle player, int position) {
     	int row = position / COLUMNS;
         int col = position % COLUMNS;
         
-        // Snake pattern movement
+        // Ajuste para el movimiento en serpiente (filas impares)
         if (row % 2 == 1) {
             col = (COLUMNS - 1) - col;
         }
         
         GridPane.setRowIndex(player, row);
         GridPane.setColumnIndex(player, col);
-        player.toFront(); // Ensure visible
+        player.toFront(); // Asegura que el jugador sea visible
     }
 
+    // Método para mover el jugador
     private void movePlayer(Circle player, int steps) {
     	if (player == P1) {
+    		// Si el jugador está en la posición inicial, lo mueve al tablero
             if (startPosition.getChildren().contains(P1)) {
                 startPosition.getChildren().remove(P1);
                 tablero.getChildren().add(P1);
             }
-            
+            // Calcula nueva posición sin pasarse del límite del tablero
             int oldPosition = p1Position;
             p1Position = Math.min(p1Position + steps, (COLUMNS * ROWS) - 1);
+            
+            // Actualiza posición visual
             updatePlayerPosition(P1, p1Position);
             
+            // Aplica efecto de la casilla de llegada
             handleTileEffect(oldPosition, p1Position);
         }
     }
     
+    // Maneja el menú contextual de opciones del juego que aparece al hacer clic en el botón.
     @FXML
     private void handleOpcionesJuego(ActionEvent event) {
-    	// Use the button itself as the source
         ContextMenu contextMenu = new ContextMenu();
 
+        // Crear items del menú
         MenuItem guardarTabla = new MenuItem("Guardar Tabla");
         MenuItem cargarTabla = new MenuItem("Cargar Tabla");
         MenuItem resetearTabla = new MenuItem("Resetear Tabla");
         MenuItem salirDelJuego = new MenuItem("Salir del Juego");
 
-        // Set actions for each item
+        // Asignar acciones a cada opción
         guardarTabla.setOnAction(e -> handleSaveGame());
         cargarTabla.setOnAction(e -> handleLoadGame());
         resetearTabla.setOnAction(e -> handleResetTable());
         salirDelJuego.setOnAction(e -> handleQuitGame());
 
-        // Add items to context menu
+        // Añadir opciones al menú contextual
         contextMenu.getItems().addAll(guardarTabla, cargarTabla, resetearTabla, salirDelJuego);
 
-        // Show context menu near the button
+        // Mostrar el menú debajo del botón de opciones
         contextMenu.show(opcionesJuego, javafx.geometry.Side.BOTTOM, 0, 0);
     }
     
+    // Método para manejar los efectos especiales al caer en una casilla
     private void handleTileEffect(int oldPos, int newPos) {
         Casilla tile = juegoTablero.getCasilla(newPos);
         
+        // Evalúa el tipo de casilla y ejecuta el efecto apropiado
         if (tile instanceof CasillaOso) {
             handleOsoTile();
         } 
@@ -266,9 +291,9 @@ public class pantallaJuegoController {
         }
     }
 
+    // Método para manejar el efecto de caer en una casilla de oso
     private void handleOsoTile() {
         addEvent("¡Encontraste un oso!");
-        P1.setFill(Color.DARKRED);
         
         if (inventario.getCantidadPeces() > 0) {
             inventario.getPeces().quitar(1);
@@ -278,85 +303,90 @@ public class pantallaJuegoController {
             updatePlayerPosition(P1, 0);
             addEvent("¡Sin peces! Vuelves al inicio");
         }
-        updatePowerUpCounts();
+        updatePowerUpCounts(); // Actualiza contadores
     }
 
+    // Método para manejar el efecto de caer en una casilla de agujero
     private void handleAgujeroTile(int pos) {
         addEvent("¡Caíste en un agujero!");
-        P1.setFill(Color.BLACK);
         
+        // Busca posición del agujero anterior
         int newPos = juegoTablero.encontrarAgujeroAnterior(pos);
         p1Position = newPos;
         updatePlayerPosition(P1, newPos);
         addEvent("Retrocedes a la casilla " + newPos);
     }
 
+    // Método para manejar el efecto de caer en una casilla de trineo
     private void handleTrineoTile(int pos) {
         addEvent("¡Encontraste un trineo!");
-        P1.setFill(Color.LIGHTBLUE);
         
+        // Busca posición del siguiente trineo
         int newPos = juegoTablero.encontrarSiguienteTrineo(pos);
         p1Position = newPos;
         updatePlayerPosition(P1, newPos);
         addEvent("¡Zummm! Avanzas a la casilla " + newPos);
     }
 
+    // Método para manejar el efecto de caer en una casilla interrogante
     private void handleInterroganteTile() {
         addEvent("¡Casilla sorpresa!");
-        P1.setFill(Color.GOLD);
         
         Random r = new Random();
-        int evento = r.nextInt(4);
+        int evento = r.nextInt(4); // Genera número aleatorio 0-3
         switch (evento) {
-            case 0:
+            case 0: // Recompensa: Pez
                 inventario.getPeces().agregar(1);
                 addEvent("¡Ganaste un pez!");
                 break;
-            case 1:
+            case 1: // Recompensa: Bolas de nieve (1-3)
                 int bolasNieve = r.nextInt(3) + 1;
                 inventario.getBolasNieve().agregar(bolasNieve);
                 addEvent("¡Ganaste " + bolasNieve + " bolas de nieve!");
                 break;
-            case 2:
+            case 2: // Recompensa: Avance rápido (5-10 casillas)
                 int avanceRapido = r.nextInt(6) + 5;
                 p1Position = Math.min(p1Position + avanceRapido, (COLUMNS * ROWS) - 1);
                 updatePlayerPosition(P1, p1Position);
                 addEvent("¡Dado rápido! Avanzas " + avanceRapido + " casillas");
                 break;
-            case 3:
+            case 3: // Recompensa: Avance lento (1-3 casillas)
                 int avanceLento = r.nextInt(3) + 1;
                 p1Position = Math.min(p1Position + avanceLento, (COLUMNS * ROWS) - 1);
                 updatePlayerPosition(P1, p1Position);
                 addEvent("¡Dado lento! Avanzas " + avanceLento + " casillas");
                 break;
         }
-        updatePowerUpCounts();
+        updatePowerUpCounts(); // Actualiza los contadores de power-ups
     }
 
+    // Añade un mensaje al registro de eventos del juego	
     private void addEvent(String message) {
         actionCount++;
         if (actionCount > 3) {
-            eventos.setText(message);
-            actionCount = 1;
+            eventos.setText(message); // Reinicia el texto con el nuevo mensaje
+            actionCount = 1;		  // Resetea el contador
         } else {
-            eventos.setText(eventos.getText() + "\n" + message);
+            eventos.setText(eventos.getText() + "\n" + message); // Añade línea nueva
         }
     }
 
+    // Maneja la acción de tirar el dado
     @FXML
     private void handleDado(ActionEvent event) {
         Random rand = new Random();
         int diceResult = rand.nextInt(6) + 1;
-        movePlayer(P1, diceResult);
+        movePlayer(P1, diceResult); // Mueve al jugador
         
         addEvent("Tiraste un " + diceResult + " y avanzaste a la casilla " + p1Position);
         
         if (p1Position >= juegoTablero.getNumeroDeCasillas() - 1) {
             addEvent("🎉 ¡Felicidades! Has llegado al final del tablero.");
-            disableGameButtons(); // Optional: Disable buttons after winning
+            disableGameButtons(); // Desactiva los botones al ganar
         }
     }
     
+    // Desactiva todos los botones de acciones del juego
     private void disableGameButtons() {
         dado.setDisable(true);
         rapido.setDisable(true);
@@ -365,65 +395,71 @@ public class pantallaJuegoController {
         nieve.setDisable(true);
     }
 
+    // Maneja el uso del dado rápido
     @FXML
     private void handleRapido() {
         if (inventario.getCantidadDados() <= 0) {
             showError("No tienes dados disponibles");
             return;
         }
-        inventario.getDados().quitar(1);
-        movePlayer(P1, 3);
+        inventario.getDados().quitar(1); // Consume 1 dado
+        movePlayer(P1, 3); // Avanza 3 casillas
         addEvent("Usaste un dado rápido (+3 movimientos)");
-        updatePowerUpCounts();
-        updateButtonStates();
+        updatePowerUpCounts(); // Actualiza contadores
+        updateButtonStates(); // Actualiza estado de botones
     }
 
+    // Maneja el uso del dado lento
     @FXML
     private void handleLento() {
         if (inventario.getCantidadDados() <= 0) {
             showError("No tienes dados disponibles");
             return;
         }
-        inventario.getDados().quitar(1);
-        movePlayer(P1, 1);
+        inventario.getDados().quitar(1); // Consume 1 dado
+        movePlayer(P1, 1); // Avanza 1 casilla
         addEvent("Usaste un dado lento (+1 movimiento)");
         updatePowerUpCounts();
         updateButtonStates();
     }
-
+    
+    // Maneja el uso de peces
     @FXML
     private void handlePeces() {
         if (inventario.getCantidadPeces() <= 0) {
             showError("No tienes peces disponibles");
             return;
         }
-        inventario.getPeces().quitar(1);
-        movePlayer(P1, 2);
+        inventario.getPeces().quitar(1); // Consume 1 pez
+        movePlayer(P1, 2); // Avanza 2 casillas
         addEvent("Usaste un pez (+2 movimientos)");
         updatePowerUpCounts();
         updateButtonStates();
     }
 
+    // Maneja el uso de bolas de nieve
     @FXML
-    private void handleNieve() {
+    private void handleNieve() { 
         if (inventario.getCantidadBolasNieve() <= 0) {
             showError("No tienes bolas de nieve disponibles");
             return;
         }
-        inventario.getBolasNieve().quitar(1);
-        movePlayer(P1, 4);
+        inventario.getBolasNieve().quitar(1); // Consume 1 bola
+        movePlayer(P1, 4); // Avanza 4 casillas
         addEvent("Usaste una bola de nieve (+4 movimientos)");
         updatePowerUpCounts();
         updateButtonStates();
     }
     
+    // Añade peces al inventario del jugador y actualiza la interfaz
     public void addPeces(int cantidad) {
-        inventario.getPeces().agregar(cantidad);
-        updatePowerUpCounts();
-        updateButtonStates();
-        addEvent("¡Obtuviste " + cantidad + " pez(es)!");
+        inventario.getPeces().agregar(cantidad); // Añade al inventario
+        updatePowerUpCounts(); // Actualiza los contadores
+        updateButtonStates(); // Habilita botones si es necesario
+        addEvent("¡Obtuviste " + cantidad + " pez(es)!"); // Notificación al jugador
     }
 
+    // Añade dados al inventario del jugador y actualiza la interfaz  
     public void addDados(int cantidad) {
         inventario.getDados().agregar(cantidad);
         updatePowerUpCounts();
@@ -431,6 +467,7 @@ public class pantallaJuegoController {
         addEvent("¡Obtuviste " + cantidad + " dado(s)!");
     }
 
+    // Añade bolas de nieve al inventario del jugador y actualiza la interfaz
     public void addBolasNieve(int cantidad) {
         inventario.getBolasNieve().agregar(cantidad);
         updatePowerUpCounts();
@@ -438,63 +475,69 @@ public class pantallaJuegoController {
         addEvent("¡Obtuviste " + cantidad + " bola(s) de nieve!");
     }
     
+    // Reinicia el tablero cargando un estado específico de casillas
     private void reiniciarTableroConEstado(Map<Integer, String> estadoCasillas) {
-        juegoTablero = new tablero(50); // Reset board
-        juegoTablero.generarTablero(); // Generate default first
+    	// Crea un tablero nuevo con 50 casillas (estado inicial)
+        juegoTablero = new tablero(50);
+        juegoTablero.generarTablero(); // Genera el tablero por defecto
 
-        // Replace with loaded values
+        // Reemplaza las casillas con los valores guardados
         for (Map.Entry<Integer, String> entry : estadoCasillas.entrySet()) {
-            int pos = entry.getKey();
-            String tipo = entry.getValue();
+            int pos = entry.getKey(); // Obtiene posición de la casilla
+            String tipo = entry.getValue(); // Obtiene tipo de casilla
 
+            // Crea la casilla según el tipo guardado
             switch (tipo) {
                 case "CasillaNormal":
                     juegoTablero.casillas.set(pos, new CasillaNormal(pos));
                     break;
                 case "CasillaOso":
-                    juegoTablero.casillas.set(pos, new CasillaOso(pos));
-                    juegoTablero.osoPositions.add(pos);
+                    juegoTablero.casillas.set(pos, new CasillaOso(pos)); 
+                    juegoTablero.osoPositions.add(pos); // Registra posición de oso
                     break;
                 case "CasillaAgujero":
                     juegoTablero.casillas.set(pos, new CasillaAgujero(pos, juegoTablero));
-                    juegoTablero.agujeroPositions.add(pos);
+                    juegoTablero.agujeroPositions.add(pos); // Registra posición de agujero
                     break;
                 case "CasillaTrineo":
                     juegoTablero.casillas.set(pos, new CasillaTrineo(pos, juegoTablero));
-                    juegoTablero.trineoPositions.add(pos);
+                    juegoTablero.trineoPositions.add(pos); // Registra posición de trineo
                     break;
                 case "CasillaInterrogante":
                     juegoTablero.casillas.set(pos, new CasillaInterrogante(pos));
-                    juegoTablero.interrogantePositions.add(pos);
+                    juegoTablero.interrogantePositions.add(pos); // Registra posición de interrogante
                     break;
             }
         }
     }
 
+    // Maneja el inicio de un nuevo juego
     @FXML
     private void handleNewGame() { resetPlayerPositions(); }
     
+    // Maneja el guardado de la partida actual
     @FXML
     private void handleSaveGame() { 
         try {
-            // Create board state map
+        	// Prepara el estado del tablero (posición -> tipo de casilla)
             Map<Integer, String> boardState = new HashMap<>();
             for (int i = 0; i < juegoTablero.getNumeroDeCasillas(); i++) {
                 Casilla casilla = juegoTablero.getCasilla(i);
                 boardState.put(i, casilla.getClass().getSimpleName());
             }
 
-            int currentPlayerPosition = 0;
+            int currentPlayerPosition = 0; // Posición actual del jugador
 
-            bbdd bb = new bbdd();
+            bbdd bb = new bbdd(); // Conexión con la base de datos
             Connection dbConnection = bb.conectarBaseDatos();
             PartidaDAO partidaDAO = new PartidaDAO(dbConnection);
 
+            // Formato de fecha para el guardado
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-            // Save without passing numPartida manually
+            // Guarda la partida y obtiene el ID generado
             int currentGameId = partidaDAO.guardarNuevaPartida(
-            	    LocalDate.now().format(formatter), // Fecha
+            	    LocalDate.now().format(formatter), // Fecha actual
             	    boardState,                        // Estado del tablero
             	    inventario,                        // Inventario del jugador
             	    currentUserId,                     // ID del jugador
@@ -506,25 +549,27 @@ public class pantallaJuegoController {
             } else {
                 showError("Hubo un problema al guardar la partida.");
             }
-
         } catch (Exception e) {
             showError("No se pudo guardar la partida: " + e.getMessage());
         } 
     }
     
+    // Reinicia completamente el tablero de juego
     private void handleResetTable() {
         addEvent("🔄 Reiniciando el tablero...");
-        juegoTablero = new tablero(50);
-        juegoTablero.generarTablero();
-        highlightSpecialSquares();
-        resetPlayerPositions();
-        updatePowerUpCounts();
-        updateButtonStates();
+        juegoTablero = new tablero(50);	// Nuevo tablero
+        juegoTablero.generarTablero();	// Genera casillas
+        highlightSpecialSquares(); 		// Resalta casillas especiales
+        resetPlayerPositions(); 		// Reinicia jugadores
+        updatePowerUpCounts(); 			// Actualiza contadores
+        updateButtonStates();			// Habilita/deshabilita botones
         addEvent("🔁 Tablero reiniciado correctamente.");
     }
     
+    // Maneja la carga de una partida guardada
     @FXML
-    private void handleLoadGame() { 
+    private void handleLoadGame() {
+    	// Configura el diálogo de carga
         TextInputDialog dialog = new TextInputDialog("1");
         dialog.setTitle("Cargar Partida");
         dialog.setHeaderText("Introduce el ID de la partida que deseas cargar:");
@@ -535,20 +580,18 @@ public class pantallaJuegoController {
             try {
                 int gameIdToLoad = Integer.parseInt(result.get());
 
+                // Conexión a la base de datos
                 bbdd bb = new bbdd();
                 Connection dbConnection = bb.conectarBaseDatos();
-
                 PartidaDAO partidaDAO = new PartidaDAO(dbConnection);
+                
+                // Intenta cargar la partida
                 Map<String, Object> loadedData = partidaDAO.cargarPartida(gameIdToLoad, currentUserId);
 
-                if (loadedData.isEmpty()) {
+                if (loadedData.isEmpty()) { // Si loadedData es vacio
                     showError("No se encontró ninguna partida con ese ID.");
                 } else {
-                    // Successfully loaded
                     addEvent("Partida cargada exitosamente (ID: " + gameIdToLoad + ").");
-
-                    // Optionally store it temporarily
-                    // currentGameId = gameIdToLoad;
                 }
 
             } catch (Exception e) {
@@ -559,9 +602,10 @@ public class pantallaJuegoController {
         }
     }
     
+    // Cierra completamente la aplicación
     @FXML
     private void handleQuitGame() {
     	addEvent("🚪 Saliendo del juego...");
-    	System.exit(0); 
+    	System.exit(0); // Termina la aplicación
     }
 }

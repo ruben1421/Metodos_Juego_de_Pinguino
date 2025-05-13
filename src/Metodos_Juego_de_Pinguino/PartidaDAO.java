@@ -35,13 +35,13 @@ public class PartidaDAO { //Clase para manejar las operaciones de base de datos 
             String sqlPartida = "INSERT INTO Partida (num_partida, fecha) VALUES (?, ?)";
             PreparedStatement stmtPartida = con.prepareStatement(sqlPartida);
             stmtPartida.setInt(1, numPartida);
-            stmtPartida.setDate(2, Date.valueOf(fecha)); // Assumes format like "2025-04-05"
+            stmtPartida.setDate(2, Date.valueOf(fecha)); 
             stmtPartida.executeUpdate();
 
             //Guarda la relación jugador-partida
             String sqlJugadorPartida = "INSERT INTO Jugador_Partida (id_jugador_partida, id_partida, id_jugador, inventario, posicion) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement stmtJugadorPartida = con.prepareStatement(sqlJugadorPartida);
-            stmtJugadorPartida.setInt(1, obtenerSiguienteIdJugadorPartida()); // From jugador_partida_seq
+            stmtJugadorPartida.setInt(1, obtenerSiguienteIdJugadorPartida()); 
             stmtJugadorPartida.setInt(2, numPartida);
             stmtJugadorPartida.setInt(3, idJugador);
             stmtJugadorPartida.setString(4, convertirInventarioAJSON(inventario));
@@ -56,8 +56,8 @@ public class PartidaDAO { //Clase para manejar las operaciones de base de datos 
                 Integer posicion = entry.getKey();
                 String estado = entry.getValue();
 
-                int casillaId = obtenerSiguienteIdCasilla(); // ✅ Use sequence
-                stmtCasilla.setInt(1, casillaId);           // Assign unique ID
+                int casillaId = obtenerSiguienteIdCasilla(); 
+                stmtCasilla.setInt(1, casillaId);           
                 stmtCasilla.setInt(2, numPartida);
                 stmtCasilla.setString(3, "Casilla_" + posicion);
                 stmtCasilla.setString(4, estado);
