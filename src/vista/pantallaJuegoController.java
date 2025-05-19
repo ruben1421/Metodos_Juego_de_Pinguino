@@ -22,6 +22,7 @@ import Metodos_Juego_de_Pinguino.tablero;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
@@ -76,7 +77,7 @@ public class pantallaJuegoController {
     // Método para resaltar las casillas especiales
     private void highlightSpecialSquares() { 
     	// Limpiar resaltados anteriores
-        tablero.getChildren().removeIf(node -> node instanceof Rectangle);
+    	clearHighlights();
         
         // Resaltar posiciones de Oso (marrón)
         highlightPositions(juegoTablero.getOsoPositions(), Color.BROWN);
@@ -89,6 +90,11 @@ public class pantallaJuegoController {
         
         // Resaltar posiciones de Interrogante (amarillo)
         highlightPositions(juegoTablero.getInterrogantePositions(), Color.GOLD);
+    }
+    
+    private void clearHighlights() {
+    	// Eliminar solo los rectángulos de resaltado
+    	tablero.getChildren().removeIf(node -> node instanceof Rectangle);
     }
     
     // Método para resaltar casillas especiales del tablero con rectángulos de colores
@@ -128,7 +134,7 @@ public class pantallaJuegoController {
         inventario.setCantidadPeces(1);
         inventario.setCantidadDados(1); 
         inventario.setCantidadBolasNieve(1);
-        
+        clearHighlights();
         highlightSpecialSquares();
         generarNumeroDeCasillasDelTablero();
         updatePowerUpCounts();
@@ -148,7 +154,7 @@ public class pantallaJuegoController {
                 int columnaMostrada = (fila % 2 == 1) ? (COLUMNS - 1 - columna) : columna; //Si la fila es impar, columnaMostrada = (COLUMNS - 1 - columna), si no, pues columnaMostrada = columna
 
                 // Crear texto con el número de la casilla
-                Text numeroCasilla = new Text(String.valueOf(posicion + 1));
+                Text numeroCasilla = new Text(String.valueOf(posicion));
                 numeroCasilla.setStyle("-fx-font-size: 24; -fx-fill: #000000; -fx-font-style: bold");
 
                 //Crear un contenedor para mover el texto a la derecha-abajo
@@ -299,6 +305,12 @@ public class pantallaJuegoController {
             inventario.getPeces().quitar(1);
             addEvent("Usaste un pez para calmar al oso!");
         } else {
+        	//Mostrar un mensaje que indica que caíste en agujero
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("¡Ay no! ¡¡No tienes peces y ahora el oso quiere comerte!!");
+            alert.setContentText("Retrocedes al inicio");
+            alert.showAndWait();
+        	
             p1Position = 0;
             updatePlayerPosition(P1, 0);
             addEvent("¡Sin peces! Vuelves al inicio");
@@ -312,6 +324,13 @@ public class pantallaJuegoController {
         
         // Busca posición del agujero anterior
         int newPos = juegoTablero.encontrarAgujeroAnterior(pos);
+        
+        //Mostrar un mensaje que indica que caíste en agujero
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("¡Ay no! ¡¡Caíste en un agujero!!");
+        alert.setContentText("Retrocedes al agujero anterior [casilla " + newPos + "]");
+        alert.showAndWait();
+        
         p1Position = newPos;
         updatePlayerPosition(P1, newPos);
         addEvent("Retrocedes a la casilla " + newPos);
@@ -323,6 +342,13 @@ public class pantallaJuegoController {
         
         // Busca posición del siguiente trineo
         int newPos = juegoTablero.encontrarSiguienteTrineo(pos);
+        
+        //Mostrar un mensaje que indica que caíste en trineo
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("¡Vaya! ¡¡Parece que caíste en un trineo!!");
+        alert.setContentText("Avanzas al trineo siguiente [casilla " + newPos + "]");
+        alert.showAndWait();
+        
         p1Position = newPos;
         updatePlayerPosition(P1, newPos);
         addEvent("¡Zummm! Avanzas a la casilla " + newPos);
@@ -480,6 +506,7 @@ public class pantallaJuegoController {
     	// Crea un tablero nuevo con 50 casillas (estado inicial)
         juegoTablero = new tablero(50);
         juegoTablero.generarTablero(); // Genera el tablero por defecto
+        clearHighlights();			   // Limpia resaltados anteriores
 
         // Reemplaza las casillas con los valores guardados
         for (Map.Entry<Integer, String> entry : estadoCasillas.entrySet()) {
@@ -509,6 +536,8 @@ public class pantallaJuegoController {
                     break;
             }
         }
+        
+        highlightSpecialSquares(); // Resalta casillas especiales
     }
 
     // Maneja el inicio de un nuevo juego
@@ -559,6 +588,7 @@ public class pantallaJuegoController {
         addEvent("🔄 Reiniciando el tablero...");
         juegoTablero = new tablero(50);	// Nuevo tablero
         juegoTablero.generarTablero();	// Genera casillas
+        clearHighlights();				// Limpiar resaltados anteriores
         highlightSpecialSquares(); 		// Resalta casillas especiales
         resetPlayerPositions(); 		// Reinicia jugadores
         updatePowerUpCounts(); 			// Actualiza contadores

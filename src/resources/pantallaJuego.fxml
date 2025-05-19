@@ -95,6 +95,16 @@
 		                <javafx.scene.shape.Rectangle width="20" height="20" fill="WHITE" stroke="#CCC" strokeWidth="1"/>
 		                <Text style="-fx-font-size: 14; -fx-fill: #333;" text="Casilla Normal" />
 		            </HBox>
+		            
+		            <children>
+                    	<Text style="-fx-font-size: 18; -fx-font-weight: bold; -fx-fill: #333;" text="Registro de eventos:" />
+                        <ScrollPane fitToWidth="true" minHeight="100" maxHeight="100" style="-fx-background: transparent;">
+                       		<content>
+                            	<Text fx:id="eventos" style="-fx-font-size: 14; -fx-fill: #666666;" />
+                        	</content>
+                        </ScrollPane>
+                    </children>
+		            
 		        </VBox>
 	    	</HBox>
         </center>
@@ -136,17 +146,6 @@
                                             <RowConstraints />
                                         </rowConstraints>
                                     </GridPane>
-                                </children>
-                            </VBox>
-
-                            <VBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #FFF5E6; -fx-padding: 15; -fx-background-radius: 10;">
-                                <children>
-                                    <Text style="-fx-font-size: 18; -fx-fill: #2C3E50;" text="Registro de eventos:" />
-                                    <ScrollPane fitToWidth="true" style="-fx-background: transparent;">
-                                        <content>
-                                            <Text fx:id="eventos" style="-fx-font-size: 14; -fx-fill: #666666;" />
-                                        </content>
-                                    </ScrollPane>
                                 </children>
                             </VBox>
                             
